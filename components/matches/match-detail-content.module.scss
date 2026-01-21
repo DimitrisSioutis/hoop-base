@@ -1,0 +1,125 @@
+@use "../../app/styles/variables" as *;
+@use "../../app/styles/mixins" as *;
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-6;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  transition: color $transition-fast;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+.editButton {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-4;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  background: $color-primary;
+  border-radius: $radius-md;
+  transition: background $transition-fast;
+
+  &:hover {
+    background: $color-primary-hover;
+  }
+}
+
+.videoSection {
+  @include card;
+  overflow: hidden;
+  padding: 0;
+  margin-bottom: $spacing-8;
+}
+
+.videoWrapper {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: $color-background;
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+}
+
+.matchHeader {
+  padding: $spacing-6;
+}
+
+.matchTitle {
+  font-family: $font-family-display;
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-3;
+}
+
+.matchMeta {
+  display: flex;
+  align-items: center;
+  gap: $spacing-6;
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: $color-text-muted;
+  }
+}
+
+.description {
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+  line-height: 1.6;
+  margin-top: $spacing-4;
+  padding-top: $spacing-4;
+  border-top: 1px solid $color-border;
+}
+
+.section {
+  @include card;
+
+  h2 {
+    font-family: $font-family-display;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-bottom: $spacing-6;
+  }
+}
+
+.noStats {
+  color: $color-text-muted;
+  font-size: $font-size-sm;
+}

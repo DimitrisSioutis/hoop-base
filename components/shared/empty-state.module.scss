@@ -1,0 +1,40 @@
+@use '../../app/styles/variables' as *;
+@use '../../app/styles/mixins' as *;
+
+.emptyState {
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-4;
+  padding: $spacing-8;
+  text-align: center;
+  color: $color-text-muted;
+
+  &.large {
+    padding: $spacing-16;
+
+    svg {
+      width: 64px;
+      height: 64px;
+    }
+  }
+
+  svg {
+    width: 48px;
+    height: 48px;
+    opacity: 0.5;
+  }
+
+  h3 {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+  }
+
+  p {
+    font-size: $font-size-sm;
+  }
+}
+
+.gridSpan {
+  grid-column: 1 / -1;
+}

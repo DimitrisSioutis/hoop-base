@@ -1,0 +1,172 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.playerList {
+  @include flex-column;
+  gap: $spacing-4;
+}
+
+.playerCard {
+  @include card;
+  transition: all $transition-base;
+
+  &.editing {
+    border-color: $color-primary;
+    box-shadow: 0 0 0 2px rgba($color-primary, 0.2);
+  }
+}
+
+.playerDisplay {
+  @include flex-between;
+  gap: $spacing-4;
+
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.playerInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: $radius-full;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.avatarFallback {
+  @include flex-center;
+  width: 48px;
+  height: 48px;
+  border-radius: $radius-full;
+  background: linear-gradient(135deg, $color-primary, $color-secondary);
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  flex-shrink: 0;
+}
+
+.playerDetails {
+  @include flex-column;
+  gap: $spacing-1;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+}
+
+.playerName {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.adminBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-1 $spacing-2;
+  background: rgba($color-accent, 0.15);
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  color: $color-accent;
+}
+
+.playerMeta {
+  font-size: $font-size-sm;
+  color: $color-text-muted;
+}
+
+.editButton {
+  @include button-secondary;
+  padding: $spacing-2 $spacing-4;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 100%;
+  }
+}
+
+.editForm {
+  @include flex-column;
+  gap: $spacing-6;
+}
+
+.editHeader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-4;
+  padding-bottom: $spacing-4;
+  border-bottom: 1px solid $color-border;
+}
+
+.editTitle {
+  @include flex-column;
+}
+
+.fullName {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.email {
+  font-size: $font-size-sm;
+  color: $color-text-muted;
+}
+
+.editFields {
+  @include flex-column;
+  gap: $spacing-4;
+}
+
+.adminCheckbox {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  padding: $spacing-3;
+  background: $color-surface-elevated;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: background $transition-fast;
+
+  &:hover {
+    background: $color-surface-hover;
+  }
+
+  input {
+    width: 18px;
+    height: 18px;
+    accent-color: $color-primary;
+    cursor: pointer;
+  }
+
+  span {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+  }
+}
+
+.editActions {
+  display: flex;
+  gap: $spacing-3;
+  padding-top: $spacing-4;
+  border-top: 1px solid $color-border;
+
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: column;
+  }
+}

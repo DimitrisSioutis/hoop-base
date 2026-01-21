@@ -1,0 +1,365 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: $color-background;
+}
+
+.main {
+  flex: 1;
+  margin-left: 260px;
+  padding: $spacing-8;
+
+  @media (max-width: $breakpoint-md) {
+    margin-left: 0;
+    padding: $spacing-4;
+  }
+}
+
+.header {
+  margin-bottom: $spacing-8;
+}
+
+.title {
+  font-family: $font-family-display;
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-2;
+}
+
+.subtitle {
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+}
+
+.formCard {
+  @include card;
+  max-width: 800px;
+}
+
+.form {
+  @include flex-column;
+  gap: $spacing-6;
+}
+
+.formGroup {
+  @include flex-column;
+  gap: $spacing-2;
+}
+
+.formLabel {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.formRequired {
+  color: $color-error;
+}
+
+.formInput {
+  @include input-base;
+}
+
+.formTextarea {
+  @include input-base;
+  min-height: 100px;
+  resize: vertical;
+}
+
+.formSelect {
+  @include input-base;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b6b7b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right $spacing-3 center;
+  background-size: 20px;
+  padding-right: $spacing-10;
+}
+
+.formHelp {
+  font-size: $font-size-xs;
+  color: $color-text-muted;
+}
+
+.formError {
+  font-size: $font-size-xs;
+  color: $color-error;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-4;
+
+  @media (max-width: $breakpoint-sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formActions {
+  display: flex;
+  gap: $spacing-4;
+  padding-top: $spacing-4;
+  border-top: 1px solid $color-border;
+}
+
+.submitButton {
+  @include button-primary;
+}
+
+.cancelButton {
+  @include button-secondary;
+}
+
+// Player selection for stats
+.playerSelection {
+  @include flex-column;
+  gap: $spacing-4;
+}
+
+.playerSelectionHeader {
+  @include flex-between;
+}
+
+.playerSelectionTitle {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.playerCount {
+  font-size: $font-size-sm;
+  color: $color-text-muted;
+}
+
+.playerCheckboxList {
+  @include flex-column;
+  gap: $spacing-2;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: $spacing-4;
+  background: $color-surface-elevated;
+  border-radius: $radius-md;
+  border: 1px solid $color-border;
+}
+
+.playerCheckbox {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  padding: $spacing-3;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: background $transition-fast;
+
+  &:hover {
+    background: $color-surface-hover;
+  }
+
+  input {
+    width: 18px;
+    height: 18px;
+    accent-color: $color-primary;
+    cursor: pointer;
+  }
+}
+
+.playerCheckboxInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  flex: 1;
+}
+
+.playerCheckboxAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-full;
+  object-fit: cover;
+}
+
+.playerCheckboxAvatarFallback {
+  @include flex-center;
+  width: 32px;
+  height: 32px;
+  border-radius: $radius-full;
+  background: linear-gradient(135deg, $color-primary, $color-secondary);
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.playerCheckboxName {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+// Stats entry section
+.statsEntry {
+  @include flex-column;
+  gap: $spacing-4;
+  margin-top: $spacing-6;
+  padding-top: $spacing-6;
+  border-top: 1px solid $color-border;
+}
+
+.statsEntryTitle {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.playerStatRow {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  background: $color-surface-elevated;
+  border-radius: $radius-md;
+}
+
+.playerStatHeader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  padding-bottom: $spacing-3;
+  border-bottom: 1px solid $color-border;
+}
+
+.playerStatAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: $radius-full;
+  object-fit: cover;
+}
+
+.playerStatAvatarFallback {
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  border-radius: $radius-full;
+  background: linear-gradient(135deg, $color-primary, $color-secondary);
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.playerStatName {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.playerStatInputs {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: $spacing-3;
+
+  @media (max-width: $breakpoint-md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.statInput {
+  @include flex-column;
+  gap: $spacing-1;
+}
+
+.statInputLabel {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  color: $color-text-muted;
+  text-align: center;
+}
+
+.statInputField {
+  @include input-base;
+  text-align: center;
+  padding: $spacing-2;
+  font-family: $font-family-display;
+  font-weight: $font-weight-semibold;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    opacity: 1;
+  }
+}
+
+// Success/Error messages
+.successMessage {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  background: rgba($color-success, 0.1);
+  border: 1px solid rgba($color-success, 0.3);
+  border-radius: $radius-md;
+  color: $color-success;
+  font-size: $font-size-sm;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+}
+
+.errorMessage {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  background: rgba($color-error, 0.1);
+  border: 1px solid rgba($color-error, 0.3);
+  border-radius: $radius-md;
+  color: $color-error;
+  font-size: $font-size-sm;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+}
+
+// Unauthorized state
+.unauthorized {
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-4;
+  padding: $spacing-16;
+  text-align: center;
+
+  svg {
+    width: 64px;
+    height: 64px;
+    color: $color-error;
+    opacity: 0.5;
+  }
+
+  h1 {
+    font-family: $font-family-display;
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+  }
+
+  p {
+    color: $color-text-secondary;
+  }
+
+  a {
+    @include button-primary;
+    margin-top: $spacing-4;
+  }
+}

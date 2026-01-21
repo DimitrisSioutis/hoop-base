@@ -1,0 +1,249 @@
+@use '../../app/styles/variables' as *;
+@use '../../app/styles/mixins' as *;
+
+.sidebar {
+  @include flex-column;
+  width: 260px;
+  height: 100vh;
+  background: $color-surface;
+  border-right: 1px solid $color-border;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  transition: transform $transition-base;
+
+  @media (max-width: $breakpoint-md) {
+    transform: translateX(-100%);
+
+    &.open {
+      transform: translateX(0);
+    }
+  }
+}
+
+.header {
+  @include flex-between;
+  padding: $spacing-6;
+  border-bottom: 1px solid $color-border;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+}
+
+.logoIcon {
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, $color-primary, $color-primary-hover);
+  border-radius: $radius-md;
+
+  svg {
+    width: 22px;
+    height: 22px;
+    color: $color-text-primary;
+  }
+}
+
+.logoText {
+  font-family: $font-family-display;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.nav {
+  @include flex-column;
+  flex: 1;
+  padding: $spacing-4;
+  gap: $spacing-1;
+  overflow-y: auto;
+}
+
+.navSection {
+  @include flex-column;
+  gap: $spacing-1;
+  margin-bottom: $spacing-4;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.navLabel {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $color-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: $spacing-2 $spacing-3;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  padding: $spacing-3 $spacing-4;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  border-radius: $radius-md;
+  transition: all $transition-fast;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background: $color-surface-hover;
+    color: $color-text-primary;
+  }
+
+  &.active {
+    background: rgba($color-primary, 0.1);
+    color: $color-primary;
+
+    svg {
+      color: $color-primary;
+    }
+  }
+}
+
+.footer {
+  padding: $spacing-4;
+  border-top: 1px solid $color-border;
+}
+
+.userCard {
+  @include flex-between;
+  padding: $spacing-3;
+  background: $color-surface-elevated;
+  border-radius: $radius-md;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  min-width: 0;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: $radius-full;
+  background: $color-surface-hover;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.avatarFallback {
+  @include flex-center;
+  width: 36px;
+  height: 36px;
+  border-radius: $radius-full;
+  background: linear-gradient(135deg, $color-primary, $color-secondary);
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  flex-shrink: 0;
+}
+
+.userDetails {
+  @include flex-column;
+  min-width: 0;
+}
+
+.userName {
+  @include truncate;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.userRole {
+  font-size: $font-size-xs;
+  color: $color-text-muted;
+}
+
+.signOutButton {
+  @include flex-center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  border-radius: $radius-md;
+  color: $color-text-muted;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background: $color-surface-hover;
+    color: $color-error;
+  }
+}
+
+.mobileToggle {
+  display: none;
+  position: fixed;
+  bottom: $spacing-6;
+  right: $spacing-6;
+  z-index: 99;
+
+  @media (max-width: $breakpoint-md) {
+    display: flex;
+  }
+}
+
+.toggleButton {
+  @include flex-center;
+  width: 56px;
+  height: 56px;
+  background: $color-primary;
+  border: none;
+  border-radius: $radius-full;
+  color: $color-text-primary;
+  cursor: pointer;
+  box-shadow: $shadow-lg;
+  transition: all $transition-fast;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  &:hover {
+    background: $color-primary-hover;
+    transform: scale(1.05);
+  }
+}
+
+.overlay {
+  display: none;
+
+  @media (max-width: $breakpoint-md) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba($color-background, 0.8);
+    z-index: 99;
+    opacity: 0;
+    visibility: hidden;
+    transition: all $transition-base;
+
+    &.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}

@@ -1,0 +1,120 @@
+@use '../../app/styles/variables' as *;
+@use '../../app/styles/mixins' as *;
+
+.header {
+  margin-bottom: $spacing-8;
+}
+
+.title {
+  font-family: $font-family-display;
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-2;
+}
+
+.subtitle {
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+
+  span {
+    color: $color-primary;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.section {
+  @include card;
+}
+
+.sectionHeader {
+  @include flex-between;
+  margin-bottom: $spacing-6;
+}
+
+.sectionTitle {
+  font-family: $font-family-display;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.matchCount {
+  font-size: $font-size-sm;
+  color: $color-text-muted;
+}
+
+.matchList {
+  @include flex-column;
+  gap: $spacing-3;
+}
+
+.matchItem {
+  @include flex-between;
+  padding: $spacing-4;
+  background: $color-surface-elevated;
+  border-radius: $radius-md;
+  transition: background $transition-fast;
+
+  &:hover {
+    background: $color-surface-hover;
+  }
+}
+
+.matchInfo {
+  @include flex-column;
+  gap: $spacing-1;
+}
+
+.matchDate {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.matchLocation {
+  font-size: $font-size-xs;
+  color: $color-text-muted;
+}
+
+.matchStats {
+  display: flex;
+  gap: $spacing-4;
+}
+
+.stat {
+  @include flex-column;
+  align-items: center;
+  min-width: 40px;
+}
+
+.statValue {
+  font-family: $font-family-display;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: $color-text-muted;
+}
+
+.emptyState {
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-4;
+  padding: $spacing-8;
+  text-align: center;
+  color: $color-text-muted;
+
+  svg {
+    width: 48px;
+    height: 48px;
+    opacity: 0.5;
+  }
+
+  p {
+    font-size: $font-size-sm;
+  }
+}

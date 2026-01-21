@@ -1,0 +1,78 @@
+@use "../../app/styles/variables" as *;
+@use "../../app/styles/mixins" as *;
+
+.header {
+  @include flex-between;
+  margin-bottom: $spacing-8;
+  flex-wrap: wrap;
+  gap: $spacing-4;
+}
+
+.title {
+  font-family: $font-family-display;
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.addButton {
+  @include button-primary;
+}
+
+.yearGroup {
+  margin-bottom: $spacing-10;
+  overflow-x: auto;
+  h1 {
+    font-family: $font-family-display;
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    color: $color-green;
+    margin-bottom: $spacing-4;
+  }
+
+  .monthGroup {
+    margin-bottom: $spacing-8;
+    h2 {
+      font-family: $font-family-display;
+      font-size: $font-size-xl;
+      font-weight: $font-weight-semibold;
+      color: $color-text-primary;
+      margin-bottom: $spacing-4;
+    }
+
+    .monthWrapper {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      max-width: 100%;
+      padding-bottom: $spacing-2;
+
+      > * {
+        flex-shrink: 0;
+      }
+
+      // Custom scrollbar
+      &::-webkit-scrollbar {
+        height: 8px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: $color-green;
+        border-radius: $radius-full;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: $color-green;
+        filter: brightness(1.2);
+      }
+
+      // Firefox
+      scrollbar-width: thin;
+      scrollbar-color: $color-green transparent;
+    }
+  }
+}

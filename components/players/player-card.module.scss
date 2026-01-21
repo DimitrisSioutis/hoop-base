@@ -1,0 +1,51 @@
+@use "../../app/styles/variables" as *;
+@use "../../app/styles/mixins" as *;
+
+.playerCard {
+  @include card;
+  @include flex-column;
+  align-items: center;
+  text-align: center;
+  padding: $spacing-8 $spacing-6;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+.playerName {
+  font-family: $font-family-display;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-1;
+}
+
+.playerStats {
+  display: flex;
+  gap: $spacing-6;
+  padding-top: $spacing-4;
+  border-top: 1px solid $color-border;
+  width: 100%;
+  justify-content: center;
+}
+
+.stat {
+  @include flex-column;
+  align-items: center;
+}
+
+.statValue {
+  font-family: $font-family-display;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: $color-text-muted;
+  text-transform: uppercase;
+}

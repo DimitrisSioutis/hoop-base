@@ -1,0 +1,311 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: $color-background;
+}
+
+.main {
+  flex: 1;
+  margin-left: 260px;
+  padding: $spacing-8;
+
+  @media (max-width: $breakpoint-md) {
+    margin-left: 0;
+    padding: $spacing-4;
+  }
+}
+
+.header {
+  margin-bottom: $spacing-8;
+}
+
+.title {
+  font-family: $font-family-display;
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-2;
+}
+
+.subtitle {
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+}
+
+.tabs {
+  display: flex;
+  gap: $spacing-2;
+  margin-bottom: $spacing-8;
+  overflow-x: auto;
+  padding-bottom: $spacing-2;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.tab {
+  @include button-base;
+  padding: $spacing-3 $spacing-5;
+  background: transparent;
+  color: $color-text-secondary;
+  border: 1px solid $color-border;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    background: $color-surface-hover;
+    border-color: $color-border-light;
+    color: $color-text-primary;
+  }
+
+  &.active {
+    background: $color-primary;
+    border-color: $color-primary;
+    color: $color-text-primary;
+  }
+}
+
+.leaderboardCard {
+  @include card;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 60px 2fr repeat(6, 1fr);
+  gap: $spacing-4;
+  padding: $spacing-4;
+  background: $color-surface-elevated;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-3;
+
+  @media (max-width: $breakpoint-lg) {
+    grid-template-columns: 50px 1.5fr repeat(3, 1fr);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    display: none;
+  }
+}
+
+.tableHeaderCell {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $color-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+
+  &:nth-child(2) {
+    text-align: left;
+  }
+
+  &.hideMobile {
+    @media (max-width: $breakpoint-lg) {
+      display: none;
+    }
+  }
+}
+
+.leaderboardRows {
+  @include flex-column;
+  gap: $spacing-2;
+}
+
+.leaderboardRow {
+  display: grid;
+  grid-template-columns: 60px 2fr repeat(6, 1fr);
+  gap: $spacing-4;
+  padding: $spacing-4;
+  background: $color-surface-elevated;
+  border-radius: $radius-md;
+  align-items: center;
+  transition: all $transition-fast;
+
+  &:hover {
+    background: $color-surface-hover;
+    transform: translateX(4px);
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    grid-template-columns: 50px 1.5fr repeat(3, 1fr);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    grid-template-columns: 50px 1fr;
+    gap: $spacing-3;
+    padding: $spacing-4;
+  }
+
+  &.first {
+    background: linear-gradient(135deg, rgba(#FFD700, 0.15), rgba(#FFD700, 0.05));
+    border: 1px solid rgba(#FFD700, 0.3);
+
+    .rank {
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      color: $color-background;
+    }
+  }
+
+  &.second {
+    background: linear-gradient(135deg, rgba(#C0C0C0, 0.1), rgba(#C0C0C0, 0.03));
+    border: 1px solid rgba(#C0C0C0, 0.2);
+
+    .rank {
+      background: linear-gradient(135deg, #C0C0C0, #A0A0A0);
+      color: $color-background;
+    }
+  }
+
+  &.third {
+    background: linear-gradient(135deg, rgba(#CD7F32, 0.1), rgba(#CD7F32, 0.03));
+    border: 1px solid rgba(#CD7F32, 0.2);
+
+    .rank {
+      background: linear-gradient(135deg, #CD7F32, #B87333);
+      color: $color-background;
+    }
+  }
+}
+
+.rankCell {
+  @include flex-center;
+}
+
+.rank {
+  @include flex-center;
+  width: 36px;
+  height: 36px;
+  border-radius: $radius-full;
+  background: $color-surface-hover;
+  font-family: $font-family-display;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.playerCell {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+}
+
+.playerAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: $radius-full;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.playerAvatarFallback {
+  @include flex-center;
+  width: 44px;
+  height: 44px;
+  border-radius: $radius-full;
+  background: linear-gradient(135deg, $color-primary, $color-secondary);
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  flex-shrink: 0;
+}
+
+.playerInfo {
+  @include flex-column;
+  min-width: 0;
+}
+
+.playerName {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include truncate;
+}
+
+.playerMeta {
+  font-size: $font-size-xs;
+  color: $color-text-muted;
+}
+
+.statCell {
+  text-align: center;
+
+  &.hideMobile {
+    @media (max-width: $breakpoint-lg) {
+      display: none;
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    display: none;
+  }
+}
+
+.statValue {
+  font-family: $font-family-display;
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+
+  &.highlight {
+    color: $color-primary;
+    font-size: $font-size-lg;
+  }
+}
+
+.mobileStats {
+  display: none;
+
+  @media (max-width: $breakpoint-md) {
+    display: flex;
+    gap: $spacing-4;
+    grid-column: 1 / -1;
+    padding-top: $spacing-3;
+    border-top: 1px solid $color-border;
+    justify-content: space-around;
+  }
+}
+
+.mobileStat {
+  @include flex-column;
+  align-items: center;
+}
+
+.mobileStatValue {
+  font-family: $font-family-display;
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.mobileStatLabel {
+  font-size: $font-size-xs;
+  color: $color-text-muted;
+}
+
+.emptyState {
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-4;
+  padding: $spacing-16;
+  text-align: center;
+  color: $color-text-muted;
+
+  svg {
+    width: 64px;
+    height: 64px;
+    opacity: 0.5;
+  }
+
+  h3 {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+  }
+
+  p {
+    font-size: $font-size-sm;
+  }
+}

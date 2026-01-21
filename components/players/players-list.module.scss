@@ -1,0 +1,22 @@
+@use '../../app/styles/variables' as *;
+@use '../../app/styles/mixins' as *;
+
+.header {
+  @include flex-between;
+  margin-bottom: $spacing-8;
+  flex-wrap: wrap;
+  gap: $spacing-4;
+}
+
+.title {
+  font-family: $font-family-display;
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.playerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: $spacing-6;
+}

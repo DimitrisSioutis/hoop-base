@@ -1,0 +1,1 @@
+export { MyProfileContent } from "./MyProfileContent"

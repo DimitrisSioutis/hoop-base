@@ -1,0 +1,127 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.container {
+  @include flex-center;
+  min-height: 100vh;
+  padding: $spacing-4;
+  background: $color-background;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle at 30% 20%,
+      rgba($color-primary, 0.08) 0%,
+      transparent 50%
+    );
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    right: -30%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      circle at 70% 80%,
+      rgba($color-secondary, 0.05) 0%,
+      transparent 50%
+    );
+    pointer-events: none;
+  }
+}
+
+.card {
+  @include flex-column;
+  gap: $spacing-8;
+  width: 100%;
+  max-width: 420px;
+  padding: $spacing-10;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-xl;
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  @include flex-column;
+  align-items: center;
+  gap: $spacing-4;
+  text-align: center;
+}
+
+.logo {
+  @include flex-center;
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, $color-primary, $color-primary-hover);
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-2;
+
+  svg {
+    width: 36px;
+    height: 36px;
+    color: $color-text-primary;
+  }
+}
+
+.title {
+  font-family: $font-family-display;
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+  line-height: 1.6;
+}
+
+.googleButton {
+  @include button-base;
+  width: 100%;
+  padding: $spacing-4 $spacing-6;
+  background: $color-text-primary;
+  color: $color-background;
+  font-size: $font-size-base;
+  gap: $spacing-3;
+
+  &:hover:not(:disabled) {
+    background: darken($color-text-primary, 10%);
+    transform: translateY(-1px);
+    box-shadow: $shadow-lg;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.error {
+  padding: $spacing-4;
+  background: rgba($color-error, 0.1);
+  border: 1px solid rgba($color-error, 0.3);
+  border-radius: $radius-md;
+  color: $color-error;
+  font-size: $font-size-sm;
+  text-align: center;
+}
+
+.footer {
+  font-size: $font-size-sm;
+  color: $color-text-muted;
+  text-align: center;
+}

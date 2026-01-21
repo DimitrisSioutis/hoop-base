@@ -1,0 +1,412 @@
+@use '../../app/styles/variables' as *;
+@use '../../app/styles/mixins' as *;
+
+.header {
+  margin-bottom: $spacing-8;
+}
+
+.title {
+  font-family: $font-family-display;
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-2;
+}
+
+.subtitle {
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+}
+
+.formCard {
+  @include card;
+  max-width: 800px;
+}
+
+.form {
+  @include flex-column;
+  gap: $spacing-6;
+}
+
+.formGroup {
+  @include flex-column;
+  gap: $spacing-2;
+}
+
+.formLabel {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.formRequired {
+  color: $color-error;
+}
+
+.formInput {
+  @include input-base;
+}
+
+.formHelp {
+  font-size: $font-size-xs;
+  color: $color-text-muted;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-4;
+
+  @media (max-width: $breakpoint-sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formActions {
+  display: flex;
+  gap: $spacing-4;
+  padding-top: $spacing-4;
+  border-top: 1px solid $color-border;
+}
+
+.submitButton {
+  @include button-primary;
+}
+
+.cancelButton {
+  @include button-secondary;
+}
+
+.successMessage {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  background: rgba($color-success, 0.1);
+  border: 1px solid rgba($color-success, 0.3);
+  border-radius: $radius-md;
+  color: $color-success;
+  font-size: $font-size-sm;
+  margin-bottom: $spacing-4;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+}
+
+.errorMessage {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  background: rgba($color-error, 0.1);
+  border: 1px solid rgba($color-error, 0.3);
+  border-radius: $radius-md;
+  color: $color-error;
+  font-size: $font-size-sm;
+  margin-bottom: $spacing-4;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+}
+
+// Team Selection
+.teamSelection {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 2rem;
+  margin: 2rem 0;
+
+  @media (max-width: $breakpoint-md) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.vsText {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: $color-text-secondary;
+  text-transform: uppercase;
+
+  @media (max-width: $breakpoint-md) {
+    text-align: center;
+  }
+}
+
+.teamColumn {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.teamTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: $color-text-secondary;
+}
+
+.teamPlayers {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.playerChip {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.removePlayer {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  &:hover {
+    background: #dc2626;
+  }
+}
+
+.addPlayerButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 2px dashed $color-border;
+  background: transparent;
+  color: $color-text-secondary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    border-color: $color-primary;
+    color: $color-primary;
+    background: rgba($color-primary, 0.05);
+  }
+}
+
+// Modal
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal {
+  width: 100%;
+  max-width: 420px;
+  background: $color-surface;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+
+.modalHeader {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid $color-border;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $color-text-primary;
+  }
+}
+
+.modalClose {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $color-text-secondary;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.modalContent {
+  padding: 0.75rem;
+  overflow-y: auto;
+}
+
+.playerOption {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: $color-surface-hover;
+  }
+
+  &.selected {
+    background: rgba($color-primary, 0.1);
+  }
+}
+
+.optionName {
+  flex: 1;
+  font-size: 0.875rem;
+  text-align: left;
+  color: $color-text-primary;
+}
+
+.checkIcon {
+  width: 18px;
+  height: 18px;
+  color: $color-primary;
+}
+
+.modalFooter {
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid $color-border;
+  display: flex;
+  justify-content: flex-end;
+}
+
+// Stats Entry
+.statsEntry {
+  @include flex-column;
+  gap: $spacing-4;
+  margin-top: $spacing-6;
+  padding-top: $spacing-6;
+  border-top: 1px solid $color-border;
+}
+
+.statsEntryTitle {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.teamHeader {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+
+  &.teamA {
+    color: $color-primary;
+  }
+
+  &.teamB {
+    color: $color-secondary;
+  }
+}
+
+.playerStatRow {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  background: $color-surface-elevated;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-3;
+}
+
+.playerStatHeader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  padding-bottom: $spacing-3;
+  border-bottom: 1px solid $color-border;
+}
+
+.playerStatName {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.playerStatInputs {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: $spacing-3;
+
+  @media (max-width: $breakpoint-md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.statInput {
+  @include flex-column;
+  gap: $spacing-1;
+}
+
+.statInputLabel {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  color: $color-text-muted;
+  text-align: center;
+}
+
+.statInputField {
+  @include input-base;
+  text-align: center;
+  padding: $spacing-2;
+  font-family: $font-family-display;
+  font-weight: $font-weight-semibold;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    opacity: 1;
+  }
+}

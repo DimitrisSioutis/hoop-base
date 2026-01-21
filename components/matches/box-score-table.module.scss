@@ -1,0 +1,115 @@
+@use "../../app/styles/variables" as *;
+@use "../../app/styles/mixins" as *;
+
+.statsTable {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: $spacing-8;
+}
+
+.teamTitle {
+  font-family: $font-family-display;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-4;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 2fr repeat(7, 1fr);
+  gap: $spacing-4;
+  padding: $spacing-3 $spacing-4;
+  background: $color-surface-elevated;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-3;
+
+  @media (max-width: $breakpoint-md) {
+    display: none;
+  }
+}
+
+.tableHeaderCell {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $color-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+
+  &:first-child {
+    text-align: left;
+  }
+}
+
+.statsRows {
+  @include flex-column;
+  gap: $spacing-2;
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: 2fr repeat(7, 1fr);
+  gap: $spacing-4;
+  padding: $spacing-4;
+  background: $color-surface-elevated;
+  border-radius: $radius-md;
+  align-items: center;
+  transition: background $transition-fast;
+
+  &:hover {
+    background: $color-surface-hover;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    grid-template-columns: 1fr;
+    gap: $spacing-3;
+  }
+}
+
+.playerCell {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+}
+
+.playerName {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.statValue {
+  font-family: $font-family-display;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  text-align: center;
+
+  &.highlight {
+    color: $color-primary;
+  }
+}
+
+.teamTotals {
+  display: grid;
+  grid-template-columns: 2fr repeat(7, 1fr);
+  gap: $spacing-4;
+  padding: $spacing-4;
+  background: rgba($color-primary, 0.1);
+  border-radius: $radius-md;
+  margin-top: $spacing-4;
+  border: 1px solid rgba($color-primary, 0.2);
+  font-family: $font-family-display;
+  font-weight: $font-weight-bold;
+  text-align: center;
+  color: $color-green;
+
+  span:first-child {
+    text-align: left;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
