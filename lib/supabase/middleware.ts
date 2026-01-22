@@ -6,6 +6,11 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
+  // Check if this request has auth cookies in it
+  // If coming from callback redirect, cookies will be in the request
+  const hasAuthCookies = request.cookies.getAll().some(c => c.name.includes('auth-token'))
+  console.log('[MIDDLEWARE] Path:', request.nextUrl.pathname, '| Has auth cookies:', hasAuthCookies)
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -15,11 +20,16 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({
-            request,
+          cookiesToSet.forEach(({ name, value, options }) => {
+            request.cookies.set(name, value)
+            supabaseResponse.cookies.set(name, value, {
+              ...options,
+              sameSite: 'lax',
+              secure: true,
+              httpOnly: true,
+              path: '/',
+            })
           })
-          cookiesToSet.forEach(({ name, value, options }) => supabaseResponse.cookies.set(name, value, options))
         },
       },
     },
@@ -28,6 +38,8 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
+
+  console.log('[MIDDLEWARE] User:', user?.email || 'none')
 
   // Protected routes - redirect to login if not authenticated
   const isAuthPage = request.nextUrl.pathname === "/login"
