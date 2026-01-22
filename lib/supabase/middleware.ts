@@ -45,11 +45,30 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // Redirect to matches if already logged in and trying to access login
-  if (user && isAuthPage) {
-    const url = request.nextUrl.clone()
-    url.pathname = "/matches"
-    return NextResponse.redirect(url)
+  // Check if user is enabled in the database
+  if (user) {
+    const { data: dbUser } = await supabase
+      .from("users")
+      .select("is_enabled")
+      .eq("id", user.id)
+      .single()
+
+    const isEnabled = dbUser?.is_enabled ?? false
+
+    // If user is not enabled, redirect to login with pending message
+    if (!isEnabled && !isAuthPage) {
+      const url = request.nextUrl.clone()
+      url.pathname = "/login"
+      url.searchParams.set("pending", "true")
+      return NextResponse.redirect(url)
+    }
+
+    // If user is enabled and on login page, redirect to matches
+    if (isEnabled && isAuthPage) {
+      const url = request.nextUrl.clone()
+      url.pathname = "/matches"
+      return NextResponse.redirect(url)
+    }
   }
 
   return supabaseResponse

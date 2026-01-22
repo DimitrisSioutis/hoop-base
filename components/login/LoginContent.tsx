@@ -3,7 +3,6 @@
 import { useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { getSupabaseBrowserClient } from "@/lib/supabase/client"
-import { BasketballIcon } from "@/components/shared"
 import styles from "./login-content.module.scss"
 
 function LoginForm() {
@@ -29,13 +28,8 @@ function LoginForm() {
     <main className={styles.container}>
       <div className={styles.card}>
         <header className={styles.header}>
-          <div className={styles.logo}>
-            <BasketballIcon />
-          </div>
-          <h1 className={styles.title}>Hoops Tracker</h1>
-          <p className={styles.subtitle}>
-            Track your squad&apos;s basketball games, stats, and highlights all in one place.
-          </p>
+          <img src="/logo.jpeg" alt="Hoop Base Logo" className={styles.logo} />
+          <h1 className={styles.title}>Hoop Base</h1>
         </header>
 
         {error && <div className={styles.error}>Authentication failed. Please try again.</div>}
@@ -73,9 +67,7 @@ function LoginLoading() {
     <main className={styles.container}>
       <div className={styles.card}>
         <div className={styles.header}>
-          <div className={styles.logo}>
-            <BasketballIcon />
-          </div>
+          <img src="/logo.jpeg" alt="Hoop Base Logo" className={styles.logo} />
           <h1 className={styles.title}>Hoops Tracker</h1>
           <p className={styles.subtitle}>Loading...</p>
         </div>

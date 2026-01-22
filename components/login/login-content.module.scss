@@ -61,18 +61,10 @@
 }
 
 .logo {
-  @include flex-center;
-  width: 64px;
-  height: 64px;
-  background: linear-gradient(135deg, $color-primary, $color-primary-hover);
+  width: 180px;
+  height: 120px;
   border-radius: $radius-lg;
   margin-bottom: $spacing-2;
-
-  svg {
-    width: 36px;
-    height: 36px;
-    color: $color-text-primary;
-  }
 }
 
 .title {
@@ -81,12 +73,6 @@
   font-weight: $font-weight-bold;
   color: $color-text-primary;
   letter-spacing: -0.02em;
-}
-
-.subtitle {
-  font-size: $font-size-base;
-  color: $color-text-secondary;
-  line-height: 1.6;
 }
 
 .googleButton {
@@ -116,6 +102,16 @@
   border: 1px solid rgba($color-error, 0.3);
   border-radius: $radius-md;
   color: $color-error;
+  font-size: $font-size-sm;
+  text-align: center;
+}
+
+.pending {
+  padding: $spacing-4;
+  background: rgba(#f59e0b, 0.1);
+  border: 1px solid rgba(#f59e0b, 0.3);
+  border-radius: $radius-md;
+  color: #f59e0b;
   font-size: $font-size-sm;
   text-align: center;
 }
