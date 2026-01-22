@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { getSupabaseBrowserClient } from "@/lib/supabase/client"
 import Link from "next/link"
 import type { Player } from "@/lib/types"
-import { PlayerAvatar, EmptyState, TrophyIcon, calculateAveragePI } from "@/components/shared"
+import { PlayerAvatar, EmptyState, TrophyIcon, calculateAveragePI, calculateWinsLosses } from "@/components/shared"
 import styles from "./leaderboard-content.module.scss"
 
 type StatCategory = "points" | "rebounds" | "assists" | "steals" | "blocks" | "pi"
@@ -44,6 +44,8 @@ interface PlayerLeaderboardData {
   id: string
   player: LeaderboardPlayer
   games: number
+  wins: number
+  losses: number
   avgPoints: number
   avgRebounds: number
   avgAssists: number
@@ -100,6 +102,9 @@ export function LeaderboardContent() {
       const playersArray: PlayerLeaderboardData[] = playersMap.map((player) => {
         const games = player.stats.length
 
+        // Calculate wins and losses using utility function
+        const { wins, losses } = calculateWinsLosses(player.id, allStats)
+
         const gamesWithPoints = player.stats.filter((stat: any) => stat.points != null).length
         const gamesWithRebounds = player.stats.filter((stat: any) => stat.rebounds != null).length
         const gamesWithAssists = player.stats.filter((stat: any) => stat.assists != null).length
@@ -125,6 +130,8 @@ export function LeaderboardContent() {
             jersey_number: player.jersey_number,
           },
           games,
+          wins,
+          losses,
           avgPoints: gamesWithPoints > 0 ? totalPoints / gamesWithPoints : 0,
           avgRebounds: gamesWithRebounds > 0 ? totalRebounds / gamesWithRebounds : 0,
           avgAssists: gamesWithAssists > 0 ? totalAssists / gamesWithAssists : 0,
@@ -262,6 +269,7 @@ export function LeaderboardContent() {
             <div className={styles.tableHeader}>
               <span className={styles.tableHeaderCell}>#</span>
               <span className={styles.tableHeaderCell}>Player</span>
+              <span className={styles.tableHeaderCell}>W-L</span>
               <span className={styles.tableHeaderCell}>GP</span>
               <span className={styles.tableHeaderCell}>{getCategoryLabel()}</span>
               <span className={`${styles.tableHeaderCell} ${styles.hideMobile}`}>PPG</span>
@@ -298,10 +306,13 @@ export function LeaderboardContent() {
                     </div>
                   </div>
                   <div className={styles.statCell}>
+                    <span className={`${styles.statValue} ${styles.highlight}`}>{playerData.wins}-{playerData.losses}</span>
+                  </div>
+                  <div className={styles.statCell}>
                     <span className={styles.statValue}>{playerData.games}</span>
                   </div>
                   <div className={styles.statCell}>
-                    <span className={`${styles.statValue} ${styles.highlight}`}>{getCategoryValue(playerData)}</span>
+                    <span className={styles.statValue}>{getCategoryValue(playerData)}</span>
                   </div>
                   <div className={`${styles.statCell} ${styles.hideMobile}`}>
                     <span className={styles.statValue}>{playerData.avgPoints.toFixed(1)}</span>
@@ -321,6 +332,10 @@ export function LeaderboardContent() {
 
 
                   <div className={styles.mobileStats}>
+                    <div className={styles.mobileStat}>
+                      <span className={`${styles.mobileStatValue} ${styles.highlight}`}>{playerData.wins}-{playerData.losses}</span>
+                      <span className={styles.mobileStatLabel}>W-L</span>
+                    </div>
                     <div className={styles.mobileStat}>
                       <span className={styles.mobileStatValue}>{playerData.avgPoints.toFixed(1)}</span>
                       <span className={styles.mobileStatLabel}>PPG</span>

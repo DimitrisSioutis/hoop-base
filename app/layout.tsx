@@ -8,8 +8,6 @@ const redHatDisplay = Red_Hat_Display({ subsets: ["latin"], variable: "--font-di
 
 export const metadata: Metadata = {
   title: "Hoop Base",
-  description: "Track your squad's basketball games, player stats, and video highlights all in one place.",
-  generator: "v0.app",
   icons: {
     icon: [
       {

@@ -57,7 +57,7 @@
 
 .tableHeader {
   display: grid;
-  grid-template-columns: 60px 2fr repeat(7, 1fr);
+  grid-template-columns: 60px 2fr repeat(8, 1fr);
   gap: $spacing-4;
   padding: $spacing-4;
   background: $color-surface-elevated;
@@ -65,7 +65,7 @@
   margin-bottom: $spacing-3;
 
   @media (max-width: $breakpoint-lg) {
-    grid-template-columns: 50px 1.5fr repeat(3, 1fr);
+    grid-template-columns: 50px 1.5fr repeat(4, 1fr);
   }
 
   @media (max-width: $breakpoint-md) {
@@ -99,7 +99,7 @@
 
 .leaderboardRow {
   display: grid;
-  grid-template-columns: 60px 2fr repeat(7, 1fr);
+  grid-template-columns: 60px 2fr repeat(8, 1fr);
   gap: $spacing-4;
   padding: $spacing-4;
   background: $color-surface-elevated;
@@ -113,7 +113,7 @@
   }
 
   @media (max-width: $breakpoint-lg) {
-    grid-template-columns: 50px 1.5fr repeat(3, 1fr);
+    grid-template-columns: 50px 1.5fr repeat(4, 1fr);
   }
 
   @media (max-width: $breakpoint-md) {
@@ -253,6 +253,10 @@
   font-size: $font-size-base;
   font-weight: $font-weight-bold;
   color: $color-text-primary;
+
+  &.highlight {
+    color: $color-primary;
+  }
 }
 
 .mobileStatLabel {

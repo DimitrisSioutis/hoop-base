@@ -122,3 +122,43 @@ export const calculateAveragePI = (
 
   return totalPI / playerStats.length
 }
+
+/**
+ * Calculate wins and losses for a player based on their team's performance in each match
+ */
+export const calculateWinsLosses = (
+  playerId: string,
+  allStats: MatchPlayerStat[]
+): { wins: number; losses: number } => {
+  const playerStats = allStats.filter(s => s.player_id === playerId)
+
+  if (playerStats.length === 0) return { wins: 0, losses: 0 }
+
+  // Group all stats by match_id to calculate team totals
+  const matchTeamTotals: Record<string, { team_a: number; team_b: number }> = {}
+  allStats.forEach((stat) => {
+    if (!matchTeamTotals[stat.match_id]) {
+      matchTeamTotals[stat.match_id] = { team_a: 0, team_b: 0 }
+    }
+    matchTeamTotals[stat.match_id][stat.team] += stat.points || 0
+  })
+
+  let wins = 0
+  let losses = 0
+
+  playerStats.forEach((stat) => {
+    const matchTotals = matchTeamTotals[stat.match_id]
+    if (matchTotals) {
+      const playerTeamScore = matchTotals[stat.team]
+      const opponentTeamScore = stat.team === 'team_a' ? matchTotals.team_b : matchTotals.team_a
+      if (playerTeamScore > opponentTeamScore) {
+        wins++
+      } else if (playerTeamScore < opponentTeamScore) {
+        losses++
+      }
+      // Ties are not counted as wins or losses
+    }
+  })
+
+  return { wins, losses }
+}

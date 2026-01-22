@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { PlayerDetailContent } from "@/components/players"
 import { calculateAveragePI } from "@/components/shared"
 import styles from "./player-detail.module.scss"
+import { GameStat } from "@/components/players/PlayerDetailContent"
 
 interface Props {
   params: Promise<{ id: string }>
@@ -21,7 +22,7 @@ export default async function PlayerDetailPage({ params }: Props) {
   }
 
   // Fetch player's game stats with match info
-  const { data: gameStats } = await supabase
+  const { data: playerGameStats } = await supabase
     .from("player_stats")
     .select(`*, matches(id, match_date, location)`)
     .eq("player_id", id)
@@ -31,6 +32,8 @@ export default async function PlayerDetailPage({ params }: Props) {
   const { data: allStats } = await supabase
     .from("player_stats")
     .select(`player_id, match_id, team, points, rebounds, assists, turnovers`)
+
+  console.warn(playerGameStats)
 
   // Calculate career averages (only count non-null values)
   const totals = {
@@ -50,7 +53,7 @@ export default async function PlayerDetailPage({ params }: Props) {
     turnovers: 0,
   }
 
-  gameStats?.forEach((stat) => {
+  playerGameStats?.forEach((stat) => {
     totals.points += stat.points
     counts.points += 1
     if (stat.rebounds !== null) { totals.rebounds += stat.rebounds; counts.rebounds += 1 }
@@ -60,7 +63,7 @@ export default async function PlayerDetailPage({ params }: Props) {
     if (stat.turnovers !== null) { totals.turnovers += stat.turnovers; counts.turnovers += 1 }
   })
 
-  const gamesPlayed = gameStats?.length || 0
+  const gamesPlayed = playerGameStats?.length || 0
 
   // Calculate average PI
   const avgPI = allStats ? calculateAveragePI(id, allStats as any) : 0
@@ -75,15 +78,44 @@ export default async function PlayerDetailPage({ params }: Props) {
     pi: avgPI.toFixed(1),
   }
 
+    let wins = 0;
+    let losses = 0;
+
+    const updatedPlayerGameStats = playerGameStats?.map((match) => {
+      const playersTeam = match.team;
+
+      const allStatsFromMatch = allStats?.filter(
+        (s) => s.match_id === match.match_id
+      ) || [];
+
+      const teammatesPoints = allStatsFromMatch
+        .filter((s) => s.team === playersTeam)
+        .reduce((sum, s) => sum + s.points, 0);
+
+      const opponentsPoints = allStatsFromMatch
+        .filter((s) => s.team !== playersTeam)
+        .reduce((sum, s) => sum + s.points, 0);
+
+      const win = teammatesPoints > opponentsPoints;
+      win ? wins++ : losses++;
+
+      return {
+        ...match,
+        result: win ? "win" : "lose",
+      };
+    }) as GameStat[];
+
   return (
     <div className={styles.layout}>
       <Sidebar />
       <main className={styles.main}>
         <PlayerDetailContent
           player={player}
-          gameStats={gameStats}
+          gameStats={updatedPlayerGameStats}
           averages={averages}
           gamesPlayed={gamesPlayed}
+          wins = {wins}
+          losses={losses}
         />
       </main>
     </div>

@@ -99,11 +99,18 @@
   font-size: $font-size-base;
   font-weight: $font-weight-medium;
   color: $color-text-primary;
+
+  &.record {
+    color: $color-primary;
+    font-family: $font-family-display;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-lg;
+  }
 }
 
 .statsOverview {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: $spacing-4;
   margin-bottom: $spacing-8;
 
@@ -159,7 +166,7 @@
 
 .tableHeader {
   display: grid;
-  grid-template-columns: 1.5fr repeat(6, 1fr);
+  grid-template-columns: 1.5fr repeat(7, 1fr);
   gap: $spacing-4;
   padding: $spacing-3 $spacing-4;
   margin-bottom: $spacing-2;
@@ -189,7 +196,7 @@
 
 .gameRow {
   display: grid;
-  grid-template-columns: 1.5fr repeat(6, 1fr);
+  grid-template-columns: 1.5fr repeat(7, 1fr);
   gap: $spacing-4;
   padding: $spacing-4;
   background: $color-surface-elevated;

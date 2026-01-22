@@ -2,7 +2,7 @@ import Link from "next/link"
 import { PlayerAvatar, EmptyState, VideoIcon, ChevronLeftIcon, formatDate } from "@/components/shared"
 import styles from "./player-detail-content.module.scss"
 
-interface GameStat {
+export type GameStat = {
   id: string
   points: number
   rebounds: number | null
@@ -15,6 +15,7 @@ interface GameStat {
     match_date: string
     location: string | null
   } | null
+  result?: string;
 }
 
 interface Player {
@@ -41,9 +42,11 @@ interface PlayerDetailContentProps {
   gameStats: GameStat[] | null
   averages: Averages
   gamesPlayed: number
+  wins: number
+  losses: number
 }
 
-export function PlayerDetailContent({ player, gameStats, averages, gamesPlayed }: PlayerDetailContentProps) {
+export function PlayerDetailContent({ player, gameStats, averages, gamesPlayed, wins, losses }: PlayerDetailContentProps) {
   return (
     <>
       <Link href="/players" className={styles.backLink}>
@@ -62,12 +65,11 @@ export function PlayerDetailContent({ player, gameStats, averages, gamesPlayed }
         <div className={styles.infoSection}>
           <div className={styles.nameRow}>
             <h1 className={styles.name}>{player.nickname || player.name || "Unknown"}</h1>
-            {player.jersey_number && <span className={styles.jerseyNumber}>#{player.jersey_number}</span>}
           </div>
           <div className={styles.meta}>
             <div className={styles.metaItem}>
-              <span className={styles.metaLabel}>Position</span>
-              <span className={styles.metaValue}>{player.position || "N/A"}</span>
+              <span className={styles.metaLabel}>Record</span>
+              <span className={`${styles.metaValue} ${styles.record}`}>{wins}-{losses}</span>
             </div>
             <div className={styles.metaItem}>
               <span className={styles.metaLabel}>Games Played</span>
@@ -123,6 +125,7 @@ export function PlayerDetailContent({ player, gameStats, averages, gamesPlayed }
           <>
             <div className={styles.tableHeader}>
               <span className={styles.tableHeaderCell}>Game</span>
+              <span className={styles.tableHeaderCell}>W/L</span>
               <span className={styles.tableHeaderCell}>PTS</span>
               <span className={styles.tableHeaderCell}>REB</span>
               <span className={styles.tableHeaderCell}>AST</span>
@@ -140,6 +143,9 @@ export function PlayerDetailContent({ player, gameStats, averages, gamesPlayed }
                     <span className={styles.gameDate}>
                       {stat.matches?.location || ""}
                     </span>
+                  </div>
+                  <div className={styles.gameStat} data-label="W/L">
+                    <span className={styles.gameStatValue}>{stat.result === 'win' ?<>W</>:<>L</> }</span>
                   </div>
                   <div className={styles.gameStat} data-label="PTS">
                     <span className={styles.gameStatValue}>{stat.points}</span>
