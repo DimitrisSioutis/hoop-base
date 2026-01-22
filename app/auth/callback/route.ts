@@ -66,7 +66,8 @@ export async function GET(request: NextRequest) {
 
       for (const { name, value, options } of cookiesToSet) {
         const maxAge = options?.maxAge || 31536000
-        const cookieString = `${name}=${value}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`
+        // Don't use HttpOnly - browser client needs to read these cookies via JavaScript
+        const cookieString = `${name}=${value}; Path=/; Secure; SameSite=Lax; Max-Age=${maxAge}`
         headers.append('Set-Cookie', cookieString)
       }
 

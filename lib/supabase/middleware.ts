@@ -6,10 +6,6 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
-  // Check if this request has auth cookies in it
-  // If coming from callback redirect, cookies will be in the request
-  const hasAuthCookies = request.cookies.getAll().some(c => c.name.includes('auth-token'))
-  console.log('[MIDDLEWARE] Path:', request.nextUrl.pathname, '| Has auth cookies:', hasAuthCookies)
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -26,8 +22,8 @@ export async function updateSession(request: NextRequest) {
               ...options,
               sameSite: 'lax',
               secure: true,
-              httpOnly: true,
               path: '/',
+              // Don't use httpOnly - browser client needs to read these via JS
             })
           })
         },
@@ -38,8 +34,6 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-
-  console.log('[MIDDLEWARE] User:', user?.email || 'none')
 
   // Protected routes - redirect to login if not authenticated
   const isAuthPage = request.nextUrl.pathname === "/login"
