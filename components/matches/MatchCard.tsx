@@ -9,14 +9,6 @@ import {
 } from "@/components/shared";
 import styles from "./match-card.module.scss";
 
-interface PlayerStats {
-  team: string;
-  players?: {
-    name: string;
-    avatar_url?: string | null;
-  } | null;
-}
-
 interface MatchCardProplayer {
   match: {
     id: string;
@@ -79,9 +71,31 @@ export function MatchCard({ match }: MatchCardProplayer) {
       <div className={styles.matchInfo}>
         <h2 className={styles.matchTitle}>
           <>
-            <TeamDisplay players={match.teams?.teamA} />
+            <TeamDisplay players={match.teams?.teamA.players} />
             <span className={styles.vs}> vs </span>
-            <TeamDisplay players={match.teams?.teamB} />
+            <TeamDisplay players={match.teams?.teamB.players} />
+            &nbsp;
+            <span className={styles.score}>
+              <span
+                className={
+                  match.teams?.teamA.points > match.teams?.teamB.points
+                    ? styles.win
+                    : styles.loss
+                }
+              >
+                {match.teams?.teamA.points}
+              </span>
+              &nbsp;-&nbsp;
+              <span
+                className={
+                  match.teams?.teamB.points > match.teams?.teamA.points
+                    ? styles.win
+                    : styles.loss
+                }
+              >
+                {match.teams?.teamB.points}
+              </span>
+            </span>
           </>
         </h2>
         <div className={styles.matchMeta}>

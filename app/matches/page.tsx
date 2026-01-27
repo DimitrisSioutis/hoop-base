@@ -25,6 +25,7 @@ export default async function MatchesPage() {
       *,
       player_stats (
         team,
+        points,
         players (
           name,
           avatar_url
@@ -33,6 +34,8 @@ export default async function MatchesPage() {
     `,
     )
     .order("match_date", { ascending: false });
+
+  console.warn(matches);
 
   const differentYears = new Set(
     matches?.map((match) => {
@@ -50,14 +53,32 @@ export default async function MatchesPage() {
     return {
       ...rest,
       teams: {
-        teamA:
-          player_stats
-            ?.filter((ps: PlayerStatsWithPlayer) => ps.team === "team_a")
-            .map((ps: PlayerStatsWithPlayer) => ps.players) || [],
-        teamB:
-          player_stats
-            ?.filter((ps: PlayerStatsWithPlayer) => ps.team === "team_b")
-            .map((ps: PlayerStatsWithPlayer) => ps.players) || [],
+        teamA: {
+          points:
+            match.player_stats
+              ?.filter((ps: PlayerStatsWithPlayer) => ps.team === "team_a")
+              .reduce(
+                (sum: number, ps: PlayerStatsWithPlayer) => sum + ps.points,
+                0,
+              ) || 0,
+          players:
+            player_stats
+              ?.filter((ps: PlayerStatsWithPlayer) => ps.team === "team_a")
+              .map((ps: PlayerStatsWithPlayer) => ps.players) || [],
+        },
+        teamB: {
+          points:
+            match.player_stats
+              ?.filter((ps: PlayerStatsWithPlayer) => ps.team === "team_b")
+              .reduce(
+                (sum: number, ps: PlayerStatsWithPlayer) => sum + ps.points,
+                0,
+              ) || 0,
+          players:
+            player_stats
+              ?.filter((ps: PlayerStatsWithPlayer) => ps.team === "team_b")
+              .map((ps: PlayerStatsWithPlayer) => ps.players) || [],
+        },
       },
     };
   });
@@ -67,13 +88,17 @@ export default async function MatchesPage() {
       const months = Array(12)
         .fill(null)
         .map((_, monthIndex) => {
-          return matchesWithTeams.filter((match) => {
-            const matchDate = new Date(match.match_date);
-            const month = matchDate.getMonth();
-            const matchYear = matchDate.getFullYear();
-            return matchYear === yearsArray[i] && month === monthIndex;
-          });
-        });
+          return {
+            monthIndex,
+            matches: matchesWithTeams.filter((match) => {
+              const matchDate = new Date(match.match_date);
+              const month = matchDate.getMonth();
+              const matchYear = matchDate.getFullYear();
+              return matchYear === yearsArray[i] && month === monthIndex;
+            }),
+          };
+        })
+        .reverse();
       matchesFormattedByYear.push({ year: yearsArray[i], months });
     }
   }
