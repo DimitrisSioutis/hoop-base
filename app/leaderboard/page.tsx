@@ -1,8 +1,8 @@
 "use client"
 
 import { Sidebar } from "@/components/layout/sidebar"
-import { LeaderboardContent } from "@/components/leaderboard"
 import styles from "./leaderboard.module.scss"
+import { LeaderboardContent } from "@/components/leaderboard/LeaderboardContent"
 
 export default function LeaderboardPage() {
   return (

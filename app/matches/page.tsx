@@ -35,8 +35,6 @@ export default async function MatchesPage() {
     )
     .order("match_date", { ascending: false });
 
-  console.warn(matches);
-
   const differentYears = new Set(
     matches?.map((match) => {
       const date = new Date(match.match_date);

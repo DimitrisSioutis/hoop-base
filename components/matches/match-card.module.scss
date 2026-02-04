@@ -2,7 +2,6 @@
 @use "../../app/styles/mixins" as *;
 
 .matchCard {
-  @include card;
   display: block;
   padding: 0;
   width: 500px;

@@ -17,19 +17,6 @@
   flex-direction: column;
 }
 
-@mixin card {
-  background: $color-surface;
-  border: 1px solid $color-border;
-  border-radius: $radius-lg;
-  padding: $spacing-6;
-  transition: all $transition-base;
-
-  &:hover {
-    border-color: $color-border-light;
-    background: $color-surface-elevated;
-  }
-}
-
 @mixin button-base {
   display: inline-flex;
   align-items: center;

@@ -33,8 +33,6 @@ export default async function PlayerDetailPage({ params }: Props) {
     .from("player_stats")
     .select(`player_id, match_id, team, points, rebounds, assists, turnovers`)
 
-  console.warn(playerGameStats)
-
   // Calculate career averages (only count non-null values)
   const totals = {
     points: 0,

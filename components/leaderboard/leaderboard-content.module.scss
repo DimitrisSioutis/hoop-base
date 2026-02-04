@@ -38,21 +38,6 @@
   border: 1px solid $color-border;
   white-space: nowrap;
 
-  &:hover:not(:disabled) {
-    background: $color-surface-hover;
-    border-color: $color-border-light;
-    color: $color-text-primary;
-  }
-
-  &.active {
-    background: $color-primary;
-    border-color: $color-primary;
-    color: $color-text-primary;
-  }
-}
-
-.leaderboardCard {
-  @include card;
 }
 
 .tableHeader {
