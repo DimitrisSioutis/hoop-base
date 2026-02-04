@@ -24,7 +24,6 @@ interface PlayerStat {
 interface PlayerWithStats {
   id: string
   name: string
-  nickname?: string | null
   avatar_url?: string | null
   position?: string | null
   jersey_number?: number | null
@@ -124,7 +123,6 @@ export function LeaderboardContent() {
           player: {
             id: player.id,
             name: player.name,
-            nickname: player.nickname,
             avatar_url: player.avatar_url,
             position: player.position,
             jersey_number: player.jersey_number,
@@ -292,16 +290,12 @@ export function LeaderboardContent() {
                   <div className={styles.playerCell}>
                     <PlayerAvatar
                       avatarUrl={playerData.player.avatar_url}
-                      name={playerData.player.nickname || playerData.player.name}
+                      name={playerData.player.name}
                       size="lg"
                     />
                     <div className={styles.playerInfo}>
                       <span className={styles.playerName}>
-                        {playerData.player.nickname || playerData.player.name || "Unknown"}
-                      </span>
-                      <span className={styles.playerMeta}>
-                        {playerData.player.position || "N/A"}
-                        {playerData.player.jersey_number ? ` • #${playerData.player.jersey_number}` : ""}
+                        {playerData.player.name || "Unknown"}
                       </span>
                     </div>
                   </div>
