@@ -57,7 +57,7 @@
 
 .tableHeader {
   display: grid;
-  grid-template-columns: 60px 2fr repeat(8, 1fr);
+  grid-template-columns: 0.2fr 1fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr;
   gap: $spacing-4;
   padding: $spacing-4;
   background: $color-surface-elevated;
@@ -99,7 +99,7 @@
 
 .leaderboardRow {
   display: grid;
-  grid-template-columns: 60px 2fr repeat(8, 1fr);
+  grid-template-columns: 0.2fr 1fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr;
   gap: $spacing-4;
   padding: $spacing-4;
   background: $color-surface-elevated;

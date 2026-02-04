@@ -56,18 +56,18 @@ export function MatchesList({
           matchesFormattedByYear.map((yearGroup, index) => (
             <div key={index} className={styles.yearGroup}>
               <h1>{yearGroup.year}</h1>
-              {yearGroup.months.map((month, monthIndex) => (
-                <div key={monthIndex} className={styles.monthGroup}>
-                  {month.length > 0 && (
+              {yearGroup.months.map((month) => (
+                <div key={month.monthIndex} className={styles.monthGroup}>
+                  {month.matches.length > 0 && (
                     <>
                       <h2>
                         {Intl.DateTimeFormat("en", { month: "long" }).format(
-                          new Date(2024, monthIndex, 1),
+                          new Date(2024, month.monthIndex, 1),
                         )}
                       </h2>
 
                       <div className={styles.monthWrapper}>
-                        {month.map((match: Match) => (
+                        {month.matches.map((match: Match) => (
                           <MatchCard key={match.id} match={match} />
                         ))}
                       </div>
