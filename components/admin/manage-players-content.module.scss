@@ -1,5 +1,5 @@
-@use "../../app/styles/variables" as *;
-@use "../../app/styles/mixins" as *;
+@use '../../app/styles/variables' as *;
+@use '../../app/styles/mixins' as *;
 
 .header {
   @include flex-between;
@@ -73,6 +73,7 @@
 }
 
 .playerCard {
+  @include card;
   transition: all $transition-base;
 
   &.editing {

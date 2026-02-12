@@ -2,6 +2,7 @@
 @use "../../app/styles/mixins" as *;
 
 .playerCard {
+  @include card;
   @include flex-column;
   align-items: center;
   text-align: center;
