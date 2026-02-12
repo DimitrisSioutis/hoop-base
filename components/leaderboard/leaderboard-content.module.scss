@@ -37,7 +37,6 @@
   color: $color-text-secondary;
   border: 1px solid $color-border;
   white-space: nowrap;
-
 }
 
 .tableHeader {
@@ -77,6 +76,10 @@
   }
 }
 
+.tableHeaderCellClickable {
+  cursor: pointer;
+}
+
 .leaderboardRows {
   @include flex-column;
   gap: $spacing-2;
@@ -105,48 +108,6 @@
     grid-template-columns: 50px 1fr;
     gap: $spacing-3;
     padding: $spacing-4;
-  }
-
-  &.first {
-    background: linear-gradient(
-      135deg,
-      rgba(#ffd700, 0.15),
-      rgba(#ffd700, 0.05)
-    );
-    border: 1px solid rgba(#ffd700, 0.3);
-
-    .rank {
-      background: linear-gradient(135deg, #ffd700, #ffa500);
-      color: $color-background;
-    }
-  }
-
-  &.second {
-    background: linear-gradient(
-      135deg,
-      rgba(#c0c0c0, 0.1),
-      rgba(#c0c0c0, 0.03)
-    );
-    border: 1px solid rgba(#c0c0c0, 0.2);
-
-    .rank {
-      background: linear-gradient(135deg, #c0c0c0, #a0a0a0);
-      color: $color-background;
-    }
-  }
-
-  &.third {
-    background: linear-gradient(
-      135deg,
-      rgba(#cd7f32, 0.1),
-      rgba(#cd7f32, 0.03)
-    );
-    border: 1px solid rgba(#cd7f32, 0.2);
-
-    .rank {
-      background: linear-gradient(135deg, #cd7f32, #b87333);
-      color: $color-background;
-    }
   }
 }
 
@@ -247,4 +208,17 @@
 .mobileStatLabel {
   font-size: $font-size-xs;
   color: $color-text-muted;
+}
+
+.wins {
+  color: $color-success;
+}
+
+.losses {
+  color: $color-error;
+}
+
+.activeTab,
+.activeCategory {
+  color: $color-primary;
 }
