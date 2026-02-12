@@ -1,10 +1,15 @@
-import type React from "react"
-import type { Metadata, Viewport } from "next"
-import { Red_Hat_Display } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
-import "./globals.css"
+import type React from "react";
+import type { Metadata, Viewport } from "next";
+import { Red_Hat_Display } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import "./globals.css";
+import styles from "./layout.module.scss";
+import { Sidebar } from "@/components/layout/sidebar";
 
-const redHatDisplay = Red_Hat_Display({ subsets: ["latin"], variable: "--font-display" })
+const redHatDisplay = Red_Hat_Display({
+  subsets: ["latin"],
+  variable: "--font-display",
+});
 
 export const metadata: Metadata = {
   title: "Hoop Base",
@@ -25,23 +30,26 @@ export const metadata: Metadata = {
     ],
     apple: "/apple-icon.png",
   },
-}
+};
 
 export const viewport: Viewport = {
   themeColor: "#0a0a0f",
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body className={redHatDisplay.variable}>
-        {children}
+        <div className={styles.layout}>
+          <Sidebar />
+          <main className={styles.main}>{children}</main>
+        </div>
         <Analytics />
       </body>
     </html>
-  )
+  );
 }
