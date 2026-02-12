@@ -1,38 +1,49 @@
-import { getSupabaseServerClient } from "@/lib/supabase/server"
-import { Sidebar } from "@/components/layout/sidebar"
-import { notFound, redirect } from "next/navigation"
-import { MyProfileContent } from "@/components/my-profile"
-import styles from "./my-profile.module.scss"
-import { GameStat, PlayerDetailContent } from "@/components/players/PlayerDetailContent"
-import { calculateAveragePI } from "@/components/shared"
+import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { Sidebar } from "@/components/layout/sidebar";
+import { notFound, redirect } from "next/navigation";
+import { MyProfileContent } from "@/components/my-profile";
+import styles from "./my-profile.module.scss";
+import {
+  GameStat,
+  PlayerDetailContent,
+} from "@/components/players/PlayerDetailContent";
+import { calculateAveragePI } from "@/components/shared";
 
 export default async function MyProfilePage() {
-  const supabase = await getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient();
 
   // Get current user
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login")
+    redirect("/login");
   }
 
   // Fetch app user
-  const { data: appUser } = await supabase.from("users").select("*").eq("id", user.id).single()
+  const { data: appUser } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", user.id)
+    .single();
 
   // If user doesn't have a linked player, redirect to matches
   if (!appUser?.player_id) {
-    redirect("/matches")
+    redirect("/matches");
   }
 
-  const id = appUser.player_id
+  const id = appUser.player_id;
 
   // Fetch player
-  const { data: player } = await supabase.from("players").select("*").eq("id", id).single()
+  const { data: player } = await supabase
+    .from("players")
+    .select("*")
+    .eq("id", id)
+    .single();
 
   if (!player) {
-    notFound()
+    notFound();
   }
 
   // Fetch player's game stats with match info
@@ -40,13 +51,12 @@ export default async function MyProfilePage() {
     .from("player_stats")
     .select(`*, matches(id, match_date, location)`)
     .eq("player_id", id)
-    .order("created_at", { ascending: false })
+    .order("created_at", { ascending: false });
 
   // Fetch all stats for PI calculation (need match context)
   const { data: allStats } = await supabase
     .from("player_stats")
-    .select(`player_id, match_id, team, points, rebounds, assists, turnovers`)
-
+    .select(`player_id, match_id, team, points, rebounds, assists, turnovers`);
 
   // Calculate career averages (only count non-null values)
   const totals = {
@@ -56,7 +66,7 @@ export default async function MyProfilePage() {
     steals: 0,
     blocks: 0,
     turnovers: 0,
-  }
+  };
   const counts = {
     points: 0,
     rebounds: 0,
@@ -64,73 +74,92 @@ export default async function MyProfilePage() {
     steals: 0,
     blocks: 0,
     turnovers: 0,
-  }
+  };
 
   playerGameStats?.forEach((stat) => {
-    totals.points += stat.points
-    counts.points += 1
-    if (stat.rebounds !== null) { totals.rebounds += stat.rebounds; counts.rebounds += 1 }
-    if (stat.assists !== null) { totals.assists += stat.assists; counts.assists += 1 }
-    if (stat.steals !== null) { totals.steals += stat.steals; counts.steals += 1 }
-    if (stat.blocks !== null) { totals.blocks += stat.blocks; counts.blocks += 1 }
-    if (stat.turnovers !== null) { totals.turnovers += stat.turnovers; counts.turnovers += 1 }
-  })
+    totals.points += stat.points;
+    counts.points += 1;
+    if (stat.rebounds !== null) {
+      totals.rebounds += stat.rebounds;
+      counts.rebounds += 1;
+    }
+    if (stat.assists !== null) {
+      totals.assists += stat.assists;
+      counts.assists += 1;
+    }
+    if (stat.steals !== null) {
+      totals.steals += stat.steals;
+      counts.steals += 1;
+    }
+    if (stat.blocks !== null) {
+      totals.blocks += stat.blocks;
+      counts.blocks += 1;
+    }
+    if (stat.turnovers !== null) {
+      totals.turnovers += stat.turnovers;
+      counts.turnovers += 1;
+    }
+  });
 
-  const gamesPlayed = playerGameStats?.length || 0
+  const gamesPlayed = playerGameStats?.length || 0;
 
   // Calculate average PI
-  const avgPI = allStats ? calculateAveragePI(id, allStats as any) : 0
+  const avgPI = allStats ? calculateAveragePI(id, allStats as any) : 0;
 
   const averages = {
-    points: counts.points > 0 ? (totals.points / counts.points).toFixed(1) : "0.0",
-    rebounds: counts.rebounds > 0 ? (totals.rebounds / counts.rebounds).toFixed(1) : "-",
-    assists: counts.assists > 0 ? (totals.assists / counts.assists).toFixed(1) : "-",
-    steals: counts.steals > 0 ? (totals.steals / counts.steals).toFixed(1) : "-",
-    blocks: counts.blocks > 0 ? (totals.blocks / counts.blocks).toFixed(1) : "-",
-    turnovers: counts.turnovers > 0 ? (totals.turnovers / counts.turnovers).toFixed(1) : "-",
+    points:
+      counts.points > 0 ? (totals.points / counts.points).toFixed(1) : "0.0",
+    rebounds:
+      counts.rebounds > 0
+        ? (totals.rebounds / counts.rebounds).toFixed(1)
+        : "-",
+    assists:
+      counts.assists > 0 ? (totals.assists / counts.assists).toFixed(1) : "-",
+    steals:
+      counts.steals > 0 ? (totals.steals / counts.steals).toFixed(1) : "-",
+    blocks:
+      counts.blocks > 0 ? (totals.blocks / counts.blocks).toFixed(1) : "-",
+    turnovers:
+      counts.turnovers > 0
+        ? (totals.turnovers / counts.turnovers).toFixed(1)
+        : "-",
     pi: avgPI.toFixed(1),
-  }
+  };
 
-    let wins = 0;
-    let losses = 0;
+  let wins = 0;
+  let losses = 0;
 
-    const updatedPlayerGameStats = playerGameStats?.map((match) => {
-      const playersTeam = match.team;
+  const updatedPlayerGameStats = playerGameStats?.map((match) => {
+    const playersTeam = match.team;
 
-      const allStatsFromMatch = allStats?.filter(
-        (s) => s.match_id === match.match_id
-      ) || [];
+    const allStatsFromMatch =
+      allStats?.filter((s) => s.match_id === match.match_id) || [];
 
-      const teammatesPoints = allStatsFromMatch
-        .filter((s) => s.team === playersTeam)
-        .reduce((sum, s) => sum + s.points, 0);
+    const teammatesPoints = allStatsFromMatch
+      .filter((s) => s.team === playersTeam)
+      .reduce((sum, s) => sum + s.points, 0);
 
-      const opponentsPoints = allStatsFromMatch
-        .filter((s) => s.team !== playersTeam)
-        .reduce((sum, s) => sum + s.points, 0);
+    const opponentsPoints = allStatsFromMatch
+      .filter((s) => s.team !== playersTeam)
+      .reduce((sum, s) => sum + s.points, 0);
 
-      const win = teammatesPoints > opponentsPoints;
-      win ? wins++ : losses++;
+    const win = teammatesPoints > opponentsPoints;
+    win ? wins++ : losses++;
 
-      return {
-        ...match,
-        result: win ? "win" : "lose",
-      };
-    }) as GameStat[];
+    return {
+      ...match,
+      result: win ? "win" : "lose",
+    };
+  }) as GameStat[];
 
   return (
-    <div className={styles.layout}>
-      <Sidebar />
-      <main className={styles.main}>
-        <PlayerDetailContent
-          player={player}
-          gameStats={updatedPlayerGameStats}
-          averages={averages}
-          gamesPlayed={gamesPlayed}
-          wins = {wins}
-          losses={losses}
-        />
-      </main>
-    </div>
-  )
+    <PlayerDetailContent
+      player={player}
+      gameStats={updatedPlayerGameStats}
+      averages={averages}
+      gamesPlayed={gamesPlayed}
+      wins={wins}
+      losses={losses}
+    />
+  );
 }

@@ -1,7 +1,5 @@
+import { MatchesList } from "@/components/matches/MatchesList";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
-import { Sidebar } from "@/components/layout/sidebar";
-import { MatchesList } from "@/components/matches";
-import styles from "./matches.module.scss";
 import { PlayerStatsWithPlayer } from "@/lib/types";
 
 export default async function MatchesPage() {
@@ -102,14 +100,9 @@ export default async function MatchesPage() {
   }
 
   return (
-    <div className={styles.layout}>
-      <Sidebar />
-      <main className={styles.main}>
-        <MatchesList
-          matchesFormattedByYear={matchesFormattedByYear ?? null}
-          isAdmin={appUser?.is_admin || false}
-        />
-      </main>
-    </div>
+    <MatchesList
+      matchesFormattedByYear={matchesFormattedByYear ?? null}
+      isAdmin={appUser?.is_admin || false}
+    />
   );
 }
