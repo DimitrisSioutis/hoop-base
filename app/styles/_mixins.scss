@@ -122,3 +122,12 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
+@mixin bordered-box {
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+
+  &:hover {
+    border-color: $color-border-light;
+  }
+}

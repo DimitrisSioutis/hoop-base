@@ -38,10 +38,9 @@ interface BoxScoreTableProps {
     assists: number
   }
   matchId: string
-  allMatchStats: MatchPlayerStat[]
 }
 
-export function BoxScoreTable({ title, stats, totals, maxStats, matchId, allMatchStats }: BoxScoreTableProps) {
+export function BoxScoreTable({ title, stats, totals, maxStats, matchId }: BoxScoreTableProps) {
   // Calculate PI for each player and sort by PI
   const statsWithPI = stats.map(stat => {
     const piStat: MatchPlayerStat = {
@@ -57,7 +56,7 @@ export function BoxScoreTable({ title, stats, totals, maxStats, matchId, allMatc
     }
     return {
       ...stat,
-      pi: calculateMatchPI(piStat, allMatchStats),
+      pi: calculateMatchPI(piStat),
     }
   })
 

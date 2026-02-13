@@ -397,15 +397,72 @@
   text-align: center;
 }
 
+.statInputWrapper {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  overflow: hidden;
+
+  &:focus-within {
+    border-color: $color-primary;
+  }
+}
+
 .statInputField {
-  @include input-base;
   text-align: center;
   padding: $spacing-2;
+  width: 40px;
   font-family: $font-family-display;
   font-weight: $font-weight-semibold;
+  font-size: $font-size-sm;
+  background: transparent;
+  border: none;
+  color: $color-text-primary;
+  outline: none;
+  appearance: textfield;
+  -moz-appearance: textfield;
 
   &::-webkit-inner-spin-button,
   &::-webkit-outer-spin-button {
-    opacity: 1;
+    appearance: none;
+    margin: 0;
   }
+
+  &::placeholder {
+    color: $color-text-muted;
+  }
+}
+
+.statInputButtons {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid $color-border;
+}
+
+.statInputButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: $color-text-secondary;
+  cursor: pointer;
+  padding: 0;
+
+  &:first-child {
+    border-bottom: 1px solid $color-border;
+  }
+
+  &:hover {
+    background: $color-surface-hover;
+    color: $color-text-primary;
+  }
+}
+
+.teamsWrapper {
+  display: flex;
+  gap: 4%;
 }

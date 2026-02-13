@@ -1,67 +1,139 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { getSupabaseBrowserClient } from "@/lib/supabase/client"
-import Link from "next/link"
-import type { Player, MatchWithStats } from "@/lib/types"
-import { PlayerAvatar, SuccessIcon, ErrorIcon, CloseIcon, PlusIcon, CheckIcon } from "@/components/shared"
-import styles from "./new-match-content.module.scss"
+import type React from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import Link from "next/link";
+import type { Player, MatchWithStats } from "@/lib/types";
+import {
+  PlayerAvatar,
+  SuccessIcon,
+  ErrorIcon,
+  CloseIcon,
+  PlusIcon,
+  CheckIcon,
+} from "@/components/shared";
+import styles from "./new-match-content.module.scss";
 
 interface PlayerStatsForm {
-  playerId: string
-  team: 'team_a' | 'team_b'
-  points: number
-  rebounds: string
-  assists: string
-  steals: string
-  blocks: string
-  turnovers: string
+  playerId: string;
+  team: "team_a" | "team_b";
+  points: number;
+  rebounds: string;
+  assists: string;
+  steals: string;
+  blocks: string;
+  turnovers: string;
+}
+
+function StatNumberInput({
+  label,
+  value,
+  onChange,
+  required,
+  placeholder,
+}: {
+  label: string;
+  value: number | string;
+  onChange: (value: string) => void;
+  required?: boolean;
+  placeholder?: string;
+}) {
+  const increment = () => {
+    const num = typeof value === "string" ? Number.parseInt(value) || 0 : value;
+    onChange(String(num + 1));
+  };
+  const decrement = () => {
+    const num = typeof value === "string" ? Number.parseInt(value) || 0 : value;
+    if (num > 0) onChange(String(num - 1));
+  };
+
+  return (
+    <div className={styles.statInput}>
+      <label className={styles.statInputLabel}>{label}</label>
+      <div className={styles.statInputWrapper}>
+        <input
+          type="number"
+          min="0"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={styles.statInputField}
+          required={required}
+          placeholder={placeholder}
+        />
+        <div className={styles.statInputButtons}>
+          <button
+            type="button"
+            className={styles.statInputButton}
+            onClick={increment}
+            tabIndex={-1}
+            aria-label="Increase"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          </button>
+          <button
+            type="button"
+            className={styles.statInputButton}
+            onClick={decrement}
+            tabIndex={-1}
+            aria-label="Decrease"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 interface MatchFormProps {
-  match?: MatchWithStats
+  match?: MatchWithStats;
 }
 
 export function MatchForm({ match }: MatchFormProps) {
-  const isEditMode = !!match
-  const router = useRouter()
-  const [players, setPlayers] = useState<Player[]>([])
-  const [teamA, setTeamA] = useState<string[]>([])
-  const [teamB, setTeamB] = useState<string[]>([])
-  const [playerStats, setPlayerStats] = useState<Record<string, PlayerStatsForm>>({})
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
-  const [modalOpen, setModalOpen] = useState<'team_a' | 'team_b' | null>(null)
+  const isEditMode = !!match;
+  const router = useRouter();
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [teamA, setTeamA] = useState<string[]>([]);
+  const [teamB, setTeamB] = useState<string[]>([]);
+  const [playerStats, setPlayerStats] = useState<
+    Record<string, PlayerStatsForm>
+  >({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [modalOpen, setModalOpen] = useState<"team_a" | "team_b" | null>(null);
 
   const [formData, setFormData] = useState({
     description: "",
     youtube_url: match?.youtube_url || "",
     match_date: match?.match_date || "",
     location: match?.location || "",
-  })
+  });
 
   useEffect(() => {
     async function fetchPlayers() {
-      const supabase = getSupabaseBrowserClient()
-      const { data } = await supabase.from("players").select("*").order("name", { ascending: true })
+      const supabase = getSupabaseBrowserClient();
+      const { data } = await supabase
+        .from("players")
+        .select("*")
+        .order("name", { ascending: true });
 
       if (data) {
-        setPlayers(data)
+        setPlayers(data);
 
         // Pre-fill teams and stats if editing
         if (match?.player_stats) {
-          const teamAIds: string[] = []
-          const teamBIds: string[] = []
-          const statsMap: Record<string, PlayerStatsForm> = {}
+          const teamAIds: string[] = [];
+          const teamBIds: string[] = [];
+          const statsMap: Record<string, PlayerStatsForm> = {};
 
           match.player_stats.forEach((stat) => {
-            if (stat.team === 'team_a') {
-              teamAIds.push(stat.player_id)
+            if (stat.team === "team_a") {
+              teamAIds.push(stat.player_id);
             } else {
-              teamBIds.push(stat.player_id)
+              teamBIds.push(stat.player_id);
             }
             statsMap[stat.player_id] = {
               playerId: stat.player_id,
@@ -72,37 +144,39 @@ export function MatchForm({ match }: MatchFormProps) {
               steals: stat.steals?.toString() || "",
               blocks: stat.blocks?.toString() || "",
               turnovers: stat.turnovers?.toString() || "",
-            }
-          })
+            };
+          });
 
-          setTeamA(teamAIds)
-          setTeamB(teamBIds)
-          setPlayerStats(statsMap)
+          setTeamA(teamAIds);
+          setTeamB(teamBIds);
+          setPlayerStats(statsMap);
         }
       }
     }
 
-    fetchPlayers()
-  }, [match])
+    fetchPlayers();
+  }, [match]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const addPlayerToTeam = (playerId: string, team: 'team_a' | 'team_b') => {
-    if (team === 'team_a') {
-      setTeamB((prev) => prev.filter((id) => id !== playerId))
+  const addPlayerToTeam = (playerId: string, team: "team_a" | "team_b") => {
+    if (team === "team_a") {
+      setTeamB((prev) => prev.filter((id) => id !== playerId));
     } else {
-      setTeamA((prev) => prev.filter((id) => id !== playerId))
+      setTeamA((prev) => prev.filter((id) => id !== playerId));
     }
 
-    const currentTeam = team === 'team_a' ? teamA : teamB
+    const currentTeam = team === "team_a" ? teamA : teamB;
     if (!currentTeam.includes(playerId)) {
-      if (team === 'team_a') {
-        setTeamA((prev) => [...prev, playerId])
+      if (team === "team_a") {
+        setTeamA((prev) => [...prev, playerId]);
       } else {
-        setTeamB((prev) => [...prev, playerId])
+        setTeamB((prev) => [...prev, playerId]);
       }
 
       setPlayerStats((prevStats) => ({
@@ -117,28 +191,32 @@ export function MatchForm({ match }: MatchFormProps) {
           blocks: "",
           turnovers: "",
         },
-      }))
+      }));
     }
-  }
+  };
 
   const removePlayerFromTeam = (playerId: string) => {
-    setTeamA((prev) => prev.filter((id) => id !== playerId))
-    setTeamB((prev) => prev.filter((id) => id !== playerId))
-    const newStats = { ...playerStats }
-    delete newStats[playerId]
-    setPlayerStats(newStats)
-  }
+    setTeamA((prev) => prev.filter((id) => id !== playerId));
+    setTeamB((prev) => prev.filter((id) => id !== playerId));
+    const newStats = { ...playerStats };
+    delete newStats[playerId];
+    setPlayerStats(newStats);
+  };
 
-  const handleStatChange = (playerId: string, stat: keyof Omit<PlayerStatsForm, "playerId" | "team">, value: string) => {
-    if (stat === 'points') {
-      const numValue = Number.parseInt(value) || 0
+  const handleStatChange = (
+    playerId: string,
+    stat: keyof Omit<PlayerStatsForm, "playerId" | "team">,
+    value: string,
+  ) => {
+    if (stat === "points") {
+      const numValue = Number.parseInt(value) || 0;
       setPlayerStats((prev) => ({
         ...prev,
         [playerId]: {
           ...prev[playerId],
           [stat]: Math.max(0, numValue),
         },
-      }))
+      }));
     } else {
       setPlayerStats((prev) => ({
         ...prev,
@@ -146,25 +224,25 @@ export function MatchForm({ match }: MatchFormProps) {
           ...prev[playerId],
           [stat]: value,
         },
-      }))
+      }));
     }
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
     if (teamA.length === 0 && teamB.length === 0) {
-      setError("Please select at least one player for either team")
-      setLoading(false)
-      return
+      setError("Please select at least one player for either team");
+      setLoading(false);
+      return;
     }
 
     try {
-      const supabase = getSupabaseBrowserClient()
+      const supabase = getSupabaseBrowserClient();
 
-      let matchId: string
+      let matchId: string;
 
       if (isEditMode && match) {
         // Update existing match
@@ -175,23 +253,23 @@ export function MatchForm({ match }: MatchFormProps) {
             match_date: formData.match_date,
             location: formData.location || null,
           })
-          .eq("id", match.id)
+          .eq("id", match.id);
 
-        if (matchError) throw matchError
-        matchId = match.id
+        if (matchError) throw matchError;
+        matchId = match.id;
 
         // Delete existing player stats and re-insert
         const { error: deleteError } = await supabase
           .from("player_stats")
           .delete()
-          .eq("match_id", match.id)
+          .eq("match_id", match.id);
 
-        if (deleteError) throw deleteError
+        if (deleteError) throw deleteError;
       } else {
         // Create new match
         const {
           data: { user },
-        } = await supabase.auth.getUser()
+        } = await supabase.auth.getUser();
 
         const { data: newMatch, error: matchError } = await supabase
           .from("matches")
@@ -202,16 +280,16 @@ export function MatchForm({ match }: MatchFormProps) {
             created_by: user?.id,
           })
           .select()
-          .single()
+          .single();
 
-        if (matchError) throw matchError
-        matchId = newMatch.id
+        if (matchError) throw matchError;
+        matchId = newMatch.id;
       }
 
-      const allPlayers = [...teamA, ...teamB]
+      const allPlayers = [...teamA, ...teamB];
       if (allPlayers.length > 0) {
         const statsToInsert = allPlayers.map((playerId) => {
-          const stats = playerStats[playerId]
+          const stats = playerStats[playerId];
           return {
             match_id: matchId,
             player_id: playerId,
@@ -221,43 +299,59 @@ export function MatchForm({ match }: MatchFormProps) {
             assists: stats.assists ? Number.parseInt(stats.assists) : null,
             steals: stats.steals ? Number.parseInt(stats.steals) : null,
             blocks: stats.blocks ? Number.parseInt(stats.blocks) : null,
-            turnovers: stats.turnovers ? Number.parseInt(stats.turnovers) : null,
-          }
-        })
+            turnovers: stats.turnovers
+              ? Number.parseInt(stats.turnovers)
+              : null,
+          };
+        });
 
-        const { error: statsError } = await supabase.from("player_stats").insert(statsToInsert)
+        const { error: statsError } = await supabase
+          .from("player_stats")
+          .insert(statsToInsert);
 
-        if (statsError) throw statsError
+        if (statsError) throw statsError;
       }
 
-      setSuccess(true)
+      setSuccess(true);
       setTimeout(() => {
-        router.push(`/matches/${matchId}`)
-      }, 1500)
+        router.push(`/matches/${matchId}`);
+      }, 1500);
     } catch (err) {
-      setError(err instanceof Error ? err.message : isEditMode ? "Failed to update match" : "Failed to create match")
+      setError(
+        err instanceof Error
+          ? err.message
+          : isEditMode
+            ? "Failed to update match"
+            : "Failed to create match",
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const getAvailablePlayers = (forTeam: 'team_a' | 'team_b') => {
-    const otherTeam = forTeam === 'team_a' ? teamB : teamA
-    return players.filter((p) => !otherTeam.includes(p.id))
-  }
+  const getAvailablePlayers = (forTeam: "team_a" | "team_b") => {
+    const otherTeam = forTeam === "team_a" ? teamB : teamA;
+    return players.filter((p) => !otherTeam.includes(p.id));
+  };
 
-  const isPlayerInTeam = (playerId: string, team: 'team_a' | 'team_b') => {
-    return team === 'team_a' ? teamA.includes(playerId) : teamB.includes(playerId)
-  }
+  const isPlayerInTeam = (playerId: string, team: "team_a" | "team_b") => {
+    return team === "team_a"
+      ? teamA.includes(playerId)
+      : teamB.includes(playerId);
+  };
 
-  const selectedPlayers = [...teamA, ...teamB]
+  const selectedPlayers = [...teamA, ...teamB];
 
   return (
     <>
       <header className={styles.header}>
-        <h1 className={styles.title}>{isEditMode ? "Edit Match" : "Add New Match"}</h1>
+        <h1 className={styles.title}>
+          {isEditMode ? "Edit Match" : "Add New Match"}
+        </h1>
         <p className={styles.subtitle}>
-          {isEditMode ? "Update match details and player stats" : "Record a new game with video and player stats"}
+          {isEditMode
+            ? "Update match details and player stats"
+            : "Record a new game with video and player stats"}
         </p>
       </header>
 
@@ -265,7 +359,10 @@ export function MatchForm({ match }: MatchFormProps) {
         {success && (
           <div className={styles.successMessage}>
             <SuccessIcon />
-            {isEditMode ? "Match updated successfully!" : "Match created successfully!"} Redirecting...
+            {isEditMode
+              ? "Match updated successfully!"
+              : "Match created successfully!"}{" "}
+            Redirecting...
           </div>
         )}
 
@@ -287,7 +384,9 @@ export function MatchForm({ match }: MatchFormProps) {
               className={styles.formInput}
               placeholder="https://youtube.com/watch?v=..."
             />
-            <span className={styles.formHelp}>Paste the full YouTube video URL (optional)</span>
+            <span className={styles.formHelp}>
+              Paste the full YouTube video URL (optional)
+            </span>
           </div>
 
           <div className={styles.formRow}>
@@ -324,11 +423,15 @@ export function MatchForm({ match }: MatchFormProps) {
               <h3 className={styles.teamTitle}>Team A</h3>
               <div className={styles.teamPlayers}>
                 {teamA.map((playerId) => {
-                  const player = players.find((p) => p.id === playerId)
-                  if (!player) return null
+                  const player = players.find((p) => p.id === playerId);
+                  if (!player) return null;
                   return (
                     <div key={playerId} className={styles.playerChip}>
-                      <PlayerAvatar avatarUrl={player.avatar_url} name={player.name} size="md" />
+                      <PlayerAvatar
+                        avatarUrl={player.avatar_url}
+                        name={player.name}
+                        size="md"
+                      />
                       <button
                         type="button"
                         className={styles.removePlayer}
@@ -337,12 +440,12 @@ export function MatchForm({ match }: MatchFormProps) {
                         <CloseIcon />
                       </button>
                     </div>
-                  )
+                  );
                 })}
                 <button
                   type="button"
                   className={styles.addPlayerButton}
-                  onClick={() => setModalOpen('team_a')}
+                  onClick={() => setModalOpen("team_a")}
                 >
                   <PlusIcon />
                 </button>
@@ -355,11 +458,15 @@ export function MatchForm({ match }: MatchFormProps) {
               <h3 className={styles.teamTitle}>Team B</h3>
               <div className={styles.teamPlayers}>
                 {teamB.map((playerId) => {
-                  const player = players.find((p) => p.id === playerId)
-                  if (!player) return null
+                  const player = players.find((p) => p.id === playerId);
+                  if (!player) return null;
                   return (
                     <div key={playerId} className={styles.playerChip}>
-                      <PlayerAvatar avatarUrl={player.avatar_url} name={player.name} size="md" />
+                      <PlayerAvatar
+                        avatarUrl={player.avatar_url}
+                        name={player.name}
+                        size="md"
+                      />
                       <button
                         type="button"
                         className={styles.removePlayer}
@@ -368,12 +475,12 @@ export function MatchForm({ match }: MatchFormProps) {
                         <CloseIcon />
                       </button>
                     </div>
-                  )
+                  );
                 })}
                 <button
                   type="button"
                   className={styles.addPlayerButton}
-                  onClick={() => setModalOpen('team_b')}
+                  onClick={() => setModalOpen("team_b")}
                 >
                   <PlusIcon />
                 </button>
@@ -383,10 +490,19 @@ export function MatchForm({ match }: MatchFormProps) {
 
           {/* Player Selection Modal */}
           {modalOpen && (
-            <div className={styles.modalOverlay} onClick={() => setModalOpen(null)}>
-              <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <div
+              className={styles.modalOverlay}
+              onClick={() => setModalOpen(null)}
+            >
+              <div
+                className={styles.modal}
+                onClick={(e) => e.stopPropagation()}
+              >
                 <div className={styles.modalHeader}>
-                  <h3>Add Players to {modalOpen === 'team_a' ? 'Team A' : 'Team B'}</h3>
+                  <h3>
+                    Add Players to{" "}
+                    {modalOpen === "team_a" ? "Team A" : "Team B"}
+                  </h3>
                   <button
                     type="button"
                     className={styles.modalClose}
@@ -397,25 +513,31 @@ export function MatchForm({ match }: MatchFormProps) {
                 </div>
                 <div className={styles.modalContent}>
                   {getAvailablePlayers(modalOpen).map((player) => {
-                    const isSelected = isPlayerInTeam(player.id, modalOpen)
+                    const isSelected = isPlayerInTeam(player.id, modalOpen);
                     return (
                       <button
                         key={player.id}
                         type="button"
-                        className={`${styles.playerOption} ${isSelected ? styles.selected : ''}`}
+                        className={`${styles.playerOption} ${isSelected ? styles.selected : ""}`}
                         onClick={() => {
                           if (isSelected) {
-                            removePlayerFromTeam(player.id)
+                            removePlayerFromTeam(player.id);
                           } else {
-                            addPlayerToTeam(player.id, modalOpen)
+                            addPlayerToTeam(player.id, modalOpen);
                           }
                         }}
                       >
-                        <PlayerAvatar avatarUrl={player.avatar_url} name={player.name} size="sm" />
-                        <span className={styles.optionName}>{player.name || "Unknown"}</span>
+                        <PlayerAvatar
+                          avatarUrl={player.avatar_url}
+                          name={player.name}
+                          size="sm"
+                        />
+                        <span className={styles.optionName}>
+                          {player.name || "Unknown"}
+                        </span>
                         {isSelected && <CheckIcon />}
                       </button>
-                    )
+                    );
                   })}
                 </div>
                 <div className={styles.modalFooter}>
@@ -434,206 +556,110 @@ export function MatchForm({ match }: MatchFormProps) {
           {/* Stats Entry */}
           {selectedPlayers.length > 0 && (
             <div className={styles.statsEntry}>
-              <h3 className={styles.statsEntryTitle}>Enter Player Stats</h3>
-              <p style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', marginBottom: '1rem' }}>
-                Points are required. Other stats are optional - leave blank if not tracked.
-              </p>
+              <div className={styles.teamsWrapper}>
+                {teamA.length > 0 && (
+                  <div style={{ marginBottom: "1.5rem" }}>
+                    <h4 className={`${styles.teamHeader} ${styles.teamA}`}>
+                      Team A
+                    </h4>
+                    {teamA.map((playerId) => {
+                      const player = players.find((p) => p.id === playerId);
+                      const stats = playerStats[playerId];
+                      if (!player || !stats) return null;
 
-              {teamA.length > 0 && (
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <h4 className={`${styles.teamHeader} ${styles.teamA}`}>Team A</h4>
-                  {teamA.map((playerId) => {
-                    const player = players.find((p) => p.id === playerId)
-                    const stats = playerStats[playerId]
-                    if (!player || !stats) return null
-
-                    return (
-                      <div key={playerId} className={styles.playerStatRow}>
-                        <div className={styles.playerStatHeader}>
-                          <PlayerAvatar avatarUrl={player.avatar_url} name={player.name} size="md" />
-                          <span className={styles.playerStatName}>{player.name}</span>
-                        </div>
-                        <div className={styles.playerStatInputs}>
-                          <div className={styles.statInput}>
-                            <label className={styles.statInputLabel}>PTS *</label>
-                            <input
-                              type="number"
-                              min="0"
-                              value={stats.points}
-                              onChange={(e) => handleStatChange(playerId, "points", e.target.value)}
-                              className={styles.statInputField}
-                              required
+                      return (
+                        <div key={playerId} className={styles.playerStatRow}>
+                          <div className={styles.playerStatHeader}>
+                            <PlayerAvatar
+                              avatarUrl={player.avatar_url}
+                              name={player.name}
+                              size="md"
                             />
+                            <span className={styles.playerStatName}>
+                              {player.name}
+                            </span>
                           </div>
-                          <div className={styles.statInput}>
-                            <label className={styles.statInputLabel}>REB</label>
-                            <input
-                              type="number"
-                              min="0"
-                              value={stats.rebounds}
-                              onChange={(e) => handleStatChange(playerId, "rebounds", e.target.value)}
-                              className={styles.statInputField}
-                              placeholder="-"
-                            />
-                          </div>
-                          <div className={styles.statInput}>
-                            <label className={styles.statInputLabel}>AST</label>
-                            <input
-                              type="number"
-                              min="0"
-                              value={stats.assists}
-                              onChange={(e) => handleStatChange(playerId, "assists", e.target.value)}
-                              className={styles.statInputField}
-                              placeholder="-"
-                            />
-                          </div>
-                          <div className={styles.statInput}>
-                            <label className={styles.statInputLabel}>STL</label>
-                            <input
-                              type="number"
-                              min="0"
-                              value={stats.steals}
-                              onChange={(e) => handleStatChange(playerId, "steals", e.target.value)}
-                              className={styles.statInputField}
-                              placeholder="-"
-                            />
-                          </div>
-                          <div className={styles.statInput}>
-                            <label className={styles.statInputLabel}>BLK</label>
-                            <input
-                              type="number"
-                              min="0"
-                              value={stats.blocks}
-                              onChange={(e) => handleStatChange(playerId, "blocks", e.target.value)}
-                              className={styles.statInputField}
-                              placeholder="-"
-                            />
-                          </div>
-                          <div className={styles.statInput}>
-                            <label className={styles.statInputLabel}>TO</label>
-                            <input
-                              type="number"
-                              min="0"
-                              value={stats.turnovers}
-                              onChange={(e) => handleStatChange(playerId, "turnovers", e.target.value)}
-                              className={styles.statInputField}
-                              placeholder="-"
-                            />
+                          <div className={styles.playerStatInputs}>
+                            <StatNumberInput label="PTS" value={stats.points} onChange={(v) => handleStatChange(playerId, "points", v)} required />
+                            <StatNumberInput label="REB" value={stats.rebounds} onChange={(v) => handleStatChange(playerId, "rebounds", v)} placeholder="-" />
+                            <StatNumberInput label="AST" value={stats.assists} onChange={(v) => handleStatChange(playerId, "assists", v)} placeholder="-" />
+                            <StatNumberInput label="STL" value={stats.steals} onChange={(v) => handleStatChange(playerId, "steals", v)} placeholder="-" />
+                            <StatNumberInput label="BLK" value={stats.blocks} onChange={(v) => handleStatChange(playerId, "blocks", v)} placeholder="-" />
+                            <StatNumberInput label="TO" value={stats.turnovers} onChange={(v) => handleStatChange(playerId, "turnovers", v)} placeholder="-" />
                           </div>
                         </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
+                      );
+                    })}
+                  </div>
+                )}
 
-              {teamB.length > 0 && (
-                <div>
-                  <h4 className={`${styles.teamHeader} ${styles.teamB}`}>Team B</h4>
-                  {teamB.map((playerId) => {
-                    const player = players.find((p) => p.id === playerId)
-                    const stats = playerStats[playerId]
-                    if (!player || !stats) return null
+                {teamB.length > 0 && (
+                  <div>
+                    <h4 className={`${styles.teamHeader} ${styles.teamB}`}>
+                      Team B
+                    </h4>
+                    {teamB.map((playerId) => {
+                      const player = players.find((p) => p.id === playerId);
+                      const stats = playerStats[playerId];
+                      if (!player || !stats) return null;
 
-                    return (
-                      <div key={playerId} className={styles.playerStatRow}>
-                        <div className={styles.playerStatHeader}>
-                          <PlayerAvatar avatarUrl={player.avatar_url} name={player.name} size="md" />
-                          <span className={styles.playerStatName}>{player.name}</span>
-                        </div>
-                        <div className={styles.playerStatInputs}>
-                          <div className={styles.statInput}>
-                            <label className={styles.statInputLabel}>PTS *</label>
-                            <input
-                              type="number"
-                              min="0"
-                              value={stats.points}
-                              onChange={(e) => handleStatChange(playerId, "points", e.target.value)}
-                              className={styles.statInputField}
-                              required
+                      return (
+                        <div key={playerId} className={styles.playerStatRow}>
+                          <div className={styles.playerStatHeader}>
+                            <PlayerAvatar
+                              avatarUrl={player.avatar_url}
+                              name={player.name}
+                              size="md"
                             />
+                            <span className={styles.playerStatName}>
+                              {player.name}
+                            </span>
                           </div>
-                          <div className={styles.statInput}>
-                            <label className={styles.statInputLabel}>REB</label>
-                            <input
-                              type="number"
-                              min="0"
-                              value={stats.rebounds}
-                              onChange={(e) => handleStatChange(playerId, "rebounds", e.target.value)}
-                              className={styles.statInputField}
-                              placeholder="-"
-                            />
-                          </div>
-                          <div className={styles.statInput}>
-                            <label className={styles.statInputLabel}>AST</label>
-                            <input
-                              type="number"
-                              min="0"
-                              value={stats.assists}
-                              onChange={(e) => handleStatChange(playerId, "assists", e.target.value)}
-                              className={styles.statInputField}
-                              placeholder="-"
-                            />
-                          </div>
-                          <div className={styles.statInput}>
-                            <label className={styles.statInputLabel}>STL</label>
-                            <input
-                              type="number"
-                              min="0"
-                              value={stats.steals}
-                              onChange={(e) => handleStatChange(playerId, "steals", e.target.value)}
-                              className={styles.statInputField}
-                              placeholder="-"
-                            />
-                          </div>
-                          <div className={styles.statInput}>
-                            <label className={styles.statInputLabel}>BLK</label>
-                            <input
-                              type="number"
-                              min="0"
-                              value={stats.blocks}
-                              onChange={(e) => handleStatChange(playerId, "blocks", e.target.value)}
-                              className={styles.statInputField}
-                              placeholder="-"
-                            />
-                          </div>
-                          <div className={styles.statInput}>
-                            <label className={styles.statInputLabel}>TO</label>
-                            <input
-                              type="number"
-                              min="0"
-                              value={stats.turnovers}
-                              onChange={(e) => handleStatChange(playerId, "turnovers", e.target.value)}
-                              className={styles.statInputField}
-                              placeholder="-"
-                            />
+                          <div className={styles.playerStatInputs}>
+                            <StatNumberInput label="PTS" value={stats.points} onChange={(v) => handleStatChange(playerId, "points", v)} required />
+                            <StatNumberInput label="REB" value={stats.rebounds} onChange={(v) => handleStatChange(playerId, "rebounds", v)} placeholder="-" />
+                            <StatNumberInput label="AST" value={stats.assists} onChange={(v) => handleStatChange(playerId, "assists", v)} placeholder="-" />
+                            <StatNumberInput label="STL" value={stats.steals} onChange={(v) => handleStatChange(playerId, "steals", v)} placeholder="-" />
+                            <StatNumberInput label="BLK" value={stats.blocks} onChange={(v) => handleStatChange(playerId, "blocks", v)} placeholder="-" />
+                            <StatNumberInput label="TO" value={stats.turnovers} onChange={(v) => handleStatChange(playerId, "turnovers", v)} placeholder="-" />
                           </div>
                         </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
           <div className={styles.formActions}>
-            <button type="submit" className={styles.submitButton} disabled={loading}>
+            <button
+              type="submit"
+              className={styles.submitButton}
+              disabled={loading}
+            >
               {loading
-                ? (isEditMode ? "Updating..." : "Creating...")
-                : (isEditMode ? "Update Match" : "Create Match")}
+                ? isEditMode
+                  ? "Updating..."
+                  : "Creating..."
+                : isEditMode
+                  ? "Update Match"
+                  : "Create Match"}
             </button>
-            <Link href={isEditMode && match ? `/matches/${match.id}` : "/matches"} className={styles.cancelButton}>
+            <Link
+              href={isEditMode && match ? `/matches/${match.id}` : "/matches"}
+              className={styles.cancelButton}
+            >
               Cancel
             </Link>
           </div>
         </form>
       </div>
     </>
-  )
+  );
 }
 
 // Alias for backwards compatibility
 export function NewMatchContent() {
-  return <MatchForm />
+  return <MatchForm />;
 }

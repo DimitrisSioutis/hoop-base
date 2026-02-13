@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { CalendarIcon, LocationIcon, UsersIcon, formatDateLong, MatchPlayerStat } from "@/components/shared"
+import { CalendarIcon, LocationIcon, UsersIcon, formatDateLong } from "@/components/shared"
 import { BoxScoreTable } from "./BoxScoreTable"
 import styles from "./match-detail-content.module.scss"
 
@@ -40,19 +40,6 @@ export function MatchDetailContent({ match, embedUrl, playerStats, isAdmin = fal
   // Split teams
   const teamAStats = playerStats.filter(s => s.team === "team_a")
   const teamBStats = playerStats.filter(s => s.team === "team_b")
-
-  // Create allMatchStats for PI calculation
-  const allMatchStats: MatchPlayerStat[] = playerStats.map(s => ({
-    player_id: s.player_id,
-    match_id: match.id,
-    team: s.team,
-    points: s.points,
-    rebounds: s.rebounds,
-    assists: s.assists,
-    turnovers: s.turnovers,
-    steals: s.steals,
-    blocks: s.blocks,
-  }))
 
   // Calculate totals
   const calculateTotals = (stats: PlayerStat[]) =>
@@ -145,7 +132,7 @@ export function MatchDetailContent({ match, embedUrl, playerStats, isAdmin = fal
               totals={teamATotals}
               maxStats={maxA}
               matchId={match.id}
-              allMatchStats={allMatchStats}
+
             />
             <BoxScoreTable
               title="Team B"
@@ -153,7 +140,7 @@ export function MatchDetailContent({ match, embedUrl, playerStats, isAdmin = fal
               totals={teamBTotals}
               maxStats={maxB}
               matchId={match.id}
-              allMatchStats={allMatchStats}
+
             />
           </>
         ) : (

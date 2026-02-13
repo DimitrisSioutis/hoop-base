@@ -112,6 +112,7 @@
   grid-template-columns: repeat(7, 1fr);
   gap: $spacing-4;
   margin-bottom: $spacing-8;
+  @include bordered-box;
 
   @media (max-width: $breakpoint-lg) {
     grid-template-columns: repeat(3, 1fr);

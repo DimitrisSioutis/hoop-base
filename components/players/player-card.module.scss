@@ -3,6 +3,7 @@
 
 .playerCard {
   @include flex-column;
+  @include bordered-box;
   align-items: center;
   text-align: center;
   padding: $spacing-8 $spacing-6;
