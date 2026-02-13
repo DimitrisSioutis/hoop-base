@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { CalendarIcon, LocationIcon, UsersIcon, formatDateLong } from "@/components/shared"
+import { CalendarIcon, LocationIcon, UsersIcon, formatDateLong, MatchPlayerStat } from "@/components/shared"
 import { BoxScoreTable } from "./BoxScoreTable"
 import styles from "./match-detail-content.module.scss"
 
@@ -18,16 +18,6 @@ interface PlayerStat {
     name: string
     avatar_url: string | null
   } | null
-}
-
-interface MatchPlayerStat {
-  player_id: string
-  match_id: string
-  team: 'team_a' | 'team_b'
-  points: number
-  rebounds: number | null
-  assists: number | null
-  turnovers: number | null
 }
 
 interface Match {
@@ -60,6 +50,8 @@ export function MatchDetailContent({ match, embedUrl, playerStats, isAdmin = fal
     rebounds: s.rebounds,
     assists: s.assists,
     turnovers: s.turnovers,
+    steals: s.steals,
+    blocks: s.blocks,
   }))
 
   // Calculate totals

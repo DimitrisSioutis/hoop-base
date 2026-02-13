@@ -1,20 +1,9 @@
-import { calculateAveragePI, calculateWinsLosses } from "@/components/shared";
+import { calculateAveragePI, annotateGameResults, MatchPlayerStat } from "@/components/shared";
 
 export interface Player {
   id: string;
   name: string;
   avatar_url: string;
-}
-export interface PlayerStat {
-  player_id: string;
-  match_id: string;
-  team: "team_a" | "team_b";
-  points: number;
-  rebounds: number | null;
-  assists: number | null;
-  steals: number | null;
-  blocks: number | null;
-  turnovers: number | null;
 }
 
 export interface PlayerWithStats {
@@ -23,7 +12,7 @@ export interface PlayerWithStats {
   avatar_url?: string | null;
   position?: string | null;
   jersey_number?: number | null;
-  stats: PlayerStat[];
+  stats: MatchPlayerStat[];
 }
 
 export interface LeaderboardPlayer {
@@ -56,13 +45,13 @@ export interface PlayerLeaderboardData {
 
 export function mapPlayersStats(
   players: Player[],
-  stats: PlayerStat[],
+  stats: MatchPlayerStat[],
 ): PlayerLeaderboardData[] {
   return players.map((player) => {
     const playerStats = stats.filter((stat) => stat.player_id === player.id);
     const games = playerStats.length;
 
-    const { wins, losses } = calculateWinsLosses(player.id, stats);
+    const { wins, losses } = annotateGameResults(playerStats, stats);
 
     const gamesWithPoints = playerStats.filter(
       (stat) => stat.points != null,

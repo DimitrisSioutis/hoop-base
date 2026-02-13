@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { PlayerAvatar, calculateMatchPI } from "@/components/shared"
+import { PlayerAvatar, calculateMatchPI, MatchPlayerStat } from "@/components/shared"
 import styles from "./box-score-table.module.scss"
 
 interface PlayerStat {
@@ -17,16 +17,6 @@ interface PlayerStat {
     name: string
     avatar_url: string | null
   } | null
-}
-
-interface MatchPlayerStat {
-  player_id: string
-  match_id: string
-  team: 'team_a' | 'team_b'
-  points: number
-  rebounds: number | null
-  assists: number | null
-  turnovers: number | null
 }
 
 interface TeamTotals {
@@ -62,6 +52,8 @@ export function BoxScoreTable({ title, stats, totals, maxStats, matchId, allMatc
       rebounds: stat.rebounds,
       assists: stat.assists,
       turnovers: stat.turnovers,
+      steals: stat.steals,
+      blocks: stat.blocks,
     }
     return {
       ...stat,

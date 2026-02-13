@@ -1,13 +1,7 @@
 import { getSupabaseServerClient } from "@/lib/supabase/server";
-import { Sidebar } from "@/components/layout/sidebar";
 import { notFound, redirect } from "next/navigation";
-import { MyProfileContent } from "@/components/my-profile";
-import styles from "./my-profile.module.scss";
-import {
-  GameStat,
-  PlayerDetailContent,
-} from "@/components/players/PlayerDetailContent";
-import { calculateAveragePI } from "@/components/shared";
+import { PlayerDetailContent } from "@/components/players/PlayerDetailContent";
+import { calculateCareerAverages, annotateGameResults, MatchPlayerStat } from "@/components/shared";
 
 export default async function MyProfilePage() {
   const supabase = await getSupabaseServerClient();
@@ -56,101 +50,14 @@ export default async function MyProfilePage() {
   // Fetch all stats for PI calculation (need match context)
   const { data: allStats } = await supabase
     .from("player_stats")
-    .select(`player_id, match_id, team, points, rebounds, assists, turnovers`);
-
-  // Calculate career averages (only count non-null values)
-  const totals = {
-    points: 0,
-    rebounds: 0,
-    assists: 0,
-    steals: 0,
-    blocks: 0,
-    turnovers: 0,
-  };
-  const counts = {
-    points: 0,
-    rebounds: 0,
-    assists: 0,
-    steals: 0,
-    blocks: 0,
-    turnovers: 0,
-  };
-
-  playerGameStats?.forEach((stat) => {
-    totals.points += stat.points;
-    counts.points += 1;
-    if (stat.rebounds !== null) {
-      totals.rebounds += stat.rebounds;
-      counts.rebounds += 1;
-    }
-    if (stat.assists !== null) {
-      totals.assists += stat.assists;
-      counts.assists += 1;
-    }
-    if (stat.steals !== null) {
-      totals.steals += stat.steals;
-      counts.steals += 1;
-    }
-    if (stat.blocks !== null) {
-      totals.blocks += stat.blocks;
-      counts.blocks += 1;
-    }
-    if (stat.turnovers !== null) {
-      totals.turnovers += stat.turnovers;
-      counts.turnovers += 1;
-    }
-  });
+    .select(`player_id, match_id, team, points, rebounds, assists, turnovers, steals, blocks`);
 
   const gamesPlayed = playerGameStats?.length || 0;
 
-  // Calculate average PI
-  const avgPI = allStats ? calculateAveragePI(id, allStats as any) : 0;
+  const averages = calculateCareerAverages(playerGameStats, id, allStats as MatchPlayerStat[]);
 
-  const averages = {
-    points:
-      counts.points > 0 ? (totals.points / counts.points).toFixed(1) : "0.0",
-    rebounds:
-      counts.rebounds > 0
-        ? (totals.rebounds / counts.rebounds).toFixed(1)
-        : "-",
-    assists:
-      counts.assists > 0 ? (totals.assists / counts.assists).toFixed(1) : "-",
-    steals:
-      counts.steals > 0 ? (totals.steals / counts.steals).toFixed(1) : "-",
-    blocks:
-      counts.blocks > 0 ? (totals.blocks / counts.blocks).toFixed(1) : "-",
-    turnovers:
-      counts.turnovers > 0
-        ? (totals.turnovers / counts.turnovers).toFixed(1)
-        : "-",
-    pi: avgPI.toFixed(1),
-  };
-
-  let wins = 0;
-  let losses = 0;
-
-  const updatedPlayerGameStats = playerGameStats?.map((match) => {
-    const playersTeam = match.team;
-
-    const allStatsFromMatch =
-      allStats?.filter((s) => s.match_id === match.match_id) || [];
-
-    const teammatesPoints = allStatsFromMatch
-      .filter((s) => s.team === playersTeam)
-      .reduce((sum, s) => sum + s.points, 0);
-
-    const opponentsPoints = allStatsFromMatch
-      .filter((s) => s.team !== playersTeam)
-      .reduce((sum, s) => sum + s.points, 0);
-
-    const win = teammatesPoints > opponentsPoints;
-    win ? wins++ : losses++;
-
-    return {
-      ...match,
-      result: win ? "win" : "lose",
-    };
-  }) as GameStat[];
+  const { annotatedStats: updatedPlayerGameStats, wins, losses } =
+    annotateGameResults(playerGameStats, allStats as MatchPlayerStat[]);
 
   return (
     <PlayerDetailContent

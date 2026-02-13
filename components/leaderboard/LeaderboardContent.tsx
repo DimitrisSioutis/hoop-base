@@ -3,21 +3,10 @@
 import { useState, useEffect } from "react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import Link from "next/link";
-import type { Player } from "@/lib/types";
-import {
-  PlayerAvatar,
-  EmptyState,
-  TrophyIcon,
-  calculateAveragePI,
-  calculateWinsLosses,
-} from "@/components/shared";
+import { PlayerAvatar, EmptyState, TrophyIcon } from "@/components/shared";
 import styles from "./leaderboard-content.module.scss";
-import {
-  mapPlayersStats,
-  PlayerLeaderboardData,
-  PlayerStat,
-  PlayerWithStats,
-} from "./utils";
+import { mapPlayersStats, PlayerLeaderboardData } from "./utils";
+import { MatchPlayerStat } from "@/components/shared";
 
 type StatCategory =
   | "points"
@@ -47,6 +36,7 @@ export function LeaderboardContent() {
     { key: "assists", label: "APG", decimals: 1 },
     { key: "steals", label: "SPG", decimals: 1 },
     { key: "blocks", label: "BPG", decimals: 1 },
+    { key: "pi", label: "PI", decimals: 1 },
   ] as const;
 
   const mobileStats = [
@@ -81,7 +71,7 @@ export function LeaderboardContent() {
         .from("players")
         .select("id,name,avatar_url");
 
-      const playersArray = mapPlayersStats(players, stats as PlayerStat[]);
+      const playersArray = mapPlayersStats(players, stats as MatchPlayerStat[]);
 
       setPlayers(playersArray);
       setLoading(false);
