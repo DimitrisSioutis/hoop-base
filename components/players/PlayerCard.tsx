@@ -6,6 +6,7 @@ interface PlayerCardProps {
   player: {
     id: string;
     name: string;
+    slug: string;
     nickname?: string | null;
     avatar_url: string | null;
     position?: string | null;
@@ -20,7 +21,7 @@ interface PlayerCardProps {
 
 export function PlayerCard({ player, stats }: PlayerCardProps) {
   return (
-    <Link href={`/players/${player.id}`} className={styles.playerCard}>
+    <Link href={`/players/${player.slug}`} className={styles.playerCard}>
       <PlayerAvatar
         avatarUrl={player.avatar_url}
         name={player.nickname || player.name}

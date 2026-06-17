@@ -12,6 +12,7 @@ export interface User {
 export interface Player {
   id: string
   name: string
+  slug: string
   avatar_url: string | null
   created_at: string
   updated_at: string

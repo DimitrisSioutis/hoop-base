@@ -4,6 +4,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { getSupabaseBrowserClient } from "@/lib/supabase/client"
 import type { Player } from "@/lib/types"
+import { toSlug } from "@/lib/utils/slug"
 import { PlayerAvatar, SuccessIcon, ErrorIcon, EditIcon, TrashIcon } from "@/components/shared"
 import styles from "./manage-players-content.module.scss"
 
@@ -67,6 +68,7 @@ export function ManagePlayersContent() {
         .from("players")
         .update({
           name: editingPlayer.name,
+          slug: toSlug(editingPlayer.name),
           updated_at: new Date().toISOString(),
         })
         .eq("id", editingPlayer.id)
@@ -95,7 +97,8 @@ export function ManagePlayersContent() {
       const supabase = getSupabaseBrowserClient()
 
       const { error: insertError } = await supabase.from("players").insert({
-        name: newPlayer.name
+        name: newPlayer.name,
+        slug: toSlug(newPlayer.name),
       })
 
       if (insertError) throw insertError

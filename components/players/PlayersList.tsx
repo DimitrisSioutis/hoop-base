@@ -5,6 +5,7 @@ import styles from "./players-list.module.scss"
 interface Player {
   id: string
   name: string
+  slug: string
   nickname?: string | null
   avatar_url: string | null
   position?: string | null

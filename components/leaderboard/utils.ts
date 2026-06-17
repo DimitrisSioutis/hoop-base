@@ -3,6 +3,7 @@ import { calculateAveragePI, annotateGameResults, MatchPlayerStat } from "@/comp
 export interface Player {
   id: string;
   name: string;
+  slug: string;
   avatar_url: string;
 }
 
@@ -18,6 +19,7 @@ export interface PlayerWithStats {
 export interface LeaderboardPlayer {
   id: string;
   name: string;
+  slug: string;
   nickname?: string | null;
   avatar_url?: string | null;
   position?: string | null;
@@ -97,6 +99,7 @@ export function mapPlayersStats(
       player: {
         id: player.id,
         name: player.name,
+        slug: player.slug,
         avatar_url: player.avatar_url,
       },
       games,

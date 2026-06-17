@@ -69,7 +69,7 @@ export function LeaderboardContent() {
 
       const { data: players } = await supabase
         .from("players")
-        .select("id,name,avatar_url");
+        .select("id,name,slug,avatar_url");
 
       const playersArray = mapPlayersStats(players, stats as MatchPlayerStat[]);
 
@@ -127,7 +127,7 @@ export function LeaderboardContent() {
                 return (
                   <Link
                     key={playerData.id}
-                    href={`/players/${playerData.id}`}
+                    href={`/players/${playerData.player.slug}`}
                     className={styles.leaderboardRow}
                   >
                     <div className={styles.rankCell}>

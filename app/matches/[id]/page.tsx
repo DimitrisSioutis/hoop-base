@@ -46,6 +46,7 @@ export default async function MatchDetailPage({ params }: Props) {
       player:players!player_stats_player_id_fkey (
         id,
         name,
+        slug,
         avatar_url
       )
     `,

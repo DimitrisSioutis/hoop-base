@@ -15,6 +15,7 @@ interface PlayerStat {
   player: {
     id: string
     name: string
+    slug: string
     avatar_url: string | null
   } | null
 }
@@ -85,7 +86,7 @@ export function BoxScoreTable({ title, stats, totals, maxStats, matchId }: BoxSc
           return (
             <Link
               key={stat.id}
-              href={`/players/${stat.player_id}`}
+              href={`/players/${stat.player?.slug}`}
               className={styles.statsRow}
             >
               <div className={styles.playerCell}>

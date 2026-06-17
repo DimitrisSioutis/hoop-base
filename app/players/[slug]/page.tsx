@@ -4,18 +4,18 @@ import { PlayerDetailContent } from "@/components/players";
 import { calculateCareerAverages, annotateGameResults, MatchPlayerStat } from "@/components/shared";
 
 interface Props {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }
 
 export default async function PlayerDetailPage({ params }: Props) {
-  const { id } = await params;
+  const { slug } = await params;
   const supabase = await getSupabaseServerClient();
 
-  // Fetch player
+  // Fetch player by slug
   const { data: player } = await supabase
     .from("players")
     .select("*")
-    .eq("id", id)
+    .eq("slug", slug)
     .single();
 
   if (!player) {
@@ -26,7 +26,7 @@ export default async function PlayerDetailPage({ params }: Props) {
   const { data: playerGameStats } = await supabase
     .from("player_stats")
     .select(`*, matches(id, match_date, location)`)
-    .eq("player_id", id)
+    .eq("player_id", player.id)
     .order("created_at", { ascending: false });
 
   // Fetch all stats for PI calculation (need match context)
@@ -36,7 +36,7 @@ export default async function PlayerDetailPage({ params }: Props) {
 
   const gamesPlayed = playerGameStats?.length || 0;
 
-  const averages = calculateCareerAverages(playerGameStats, id, allStats as MatchPlayerStat[]);
+  const averages = calculateCareerAverages(playerGameStats, player.id, allStats as MatchPlayerStat[]);
 
   const { annotatedStats: updatedPlayerGameStats, wins, losses } =
     annotateGameResults(playerGameStats, allStats as MatchPlayerStat[]);
