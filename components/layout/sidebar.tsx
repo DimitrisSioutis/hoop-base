@@ -196,16 +196,13 @@ export function Sidebar() {
     <>
       <aside className={`${styles.sidebar} ${mobileOpen ? styles.open : ""}`}>
         <header className={styles.header}>
-          <div className={styles.logo}>
-            <div className={styles.logoIcon}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                <path d="M2 12h20" />
-              </svg>
+          <Link href="/" className={styles.logoLink}>
+            <div className={styles.logo}>
+              <div className={styles.logoIcon}>
+              </div>
+              <span className={styles.logoText}>Hoop Base</span>
             </div>
-            <span className={styles.logoText}>Hoops</span>
-          </div>
+          </Link>
         </header>
 
         <nav className={styles.nav}>

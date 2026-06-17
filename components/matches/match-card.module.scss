@@ -7,15 +7,6 @@
   width: 500px;
   flex-shrink: 0;
   cursor: pointer;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: $shadow-lg;
-
-    .thumbnail img {
-      transform: scale(1.05);
-    }
-  }
 }
 
 .thumbnail {
