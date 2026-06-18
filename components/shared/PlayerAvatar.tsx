@@ -27,6 +27,7 @@ export function PlayerAvatar({
         src={avatarUrl}
         alt=""
         className={`${styles.avatar} ${sizeClass} ${stackedClass} ${className}`.trim()}
+        title={name ?? undefined}
       />
     )
   }

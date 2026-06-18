@@ -70,13 +70,13 @@ export function BoxScoreTable({ title, stats, totals, maxStats, matchId }: BoxSc
 
       <div className={styles.tableHeader}>
         <span className={styles.tableHeaderCell}>Player</span>
-        <span className={styles.tableHeaderCell}>PI</span>
         <span className={styles.tableHeaderCell}>PTS</span>
         <span className={styles.tableHeaderCell}>REB</span>
         <span className={styles.tableHeaderCell}>AST</span>
         <span className={styles.tableHeaderCell}>STL</span>
         <span className={styles.tableHeaderCell}>BLK</span>
         <span className={styles.tableHeaderCell}>TO</span>
+        <span className={styles.tableHeaderCell}>PI</span>
       </div>
 
       <div className={styles.statsRows}>
@@ -98,9 +98,6 @@ export function BoxScoreTable({ title, stats, totals, maxStats, matchId }: BoxSc
                 <span className={styles.playerName}>{player?.name}</span>
               </div>
 
-              <span className={`${styles.statValue} ${stat.pi === maxPI && maxPI > 0 ? styles.highlight : ""}`}>
-                {stat.pi.toFixed(1)}
-              </span>
               <span className={`${styles.statValue} ${stat.points === maxStats.points && maxStats.points > 0 ? styles.highlight : ""}`}>
                 {stat.points}
               </span>
@@ -113,6 +110,9 @@ export function BoxScoreTable({ title, stats, totals, maxStats, matchId }: BoxSc
               <span className={styles.statValue}>{stat.steals}</span>
               <span className={styles.statValue}>{stat.blocks}</span>
               <span className={styles.statValue}>{stat.turnovers}</span>
+              <span className={`${styles.statValue} ${stat.pi === maxPI && maxPI > 0 ? styles.highlight : ""}`}>
+                {stat.pi.toFixed(1)}
+              </span>
             </Link>
           )
         })}
@@ -120,13 +120,13 @@ export function BoxScoreTable({ title, stats, totals, maxStats, matchId }: BoxSc
 
       <div className={styles.teamTotals}>
         <span>Totals</span>
-        <span>-</span>
         <span>{totals.points}</span>
         <span>{totals.rebounds}</span>
         <span>{totals.assists}</span>
         <span>{totals.steals}</span>
         <span>{totals.blocks}</span>
         <span>{totals.turnovers}</span>
+        <span>-</span>
       </div>
     </div>
   )

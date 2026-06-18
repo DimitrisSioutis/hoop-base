@@ -87,10 +87,6 @@ export function PlayerDetailContent({ player, gameStats, averages, gamesPlayed, 
 
       <div className={styles.statsOverview}>
         <div className={styles.statCard}>
-          <span className={styles.statValue}>{averages.pi}</span>
-          <span className={styles.statLabel}>PI</span>
-        </div>
-        <div className={styles.statCard}>
           <span className={styles.statValue}>{averages.points}</span>
           <span className={styles.statLabel}>PPG</span>
         </div>
@@ -113,6 +109,10 @@ export function PlayerDetailContent({ player, gameStats, averages, gamesPlayed, 
         <div className={styles.statCard}>
           <span className={styles.statValue}>{averages.turnovers}</span>
           <span className={styles.statLabel}>TPG</span>
+        </div>
+        <div className={styles.statCard}>
+          <span className={styles.statValue}>{averages.pi}</span>
+          <span className={styles.statLabel}>PI</span>
         </div>
       </div>
 
