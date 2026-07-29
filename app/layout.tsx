@@ -1,15 +1,8 @@
 import type React from "react";
 import type { Metadata, Viewport } from "next";
-import { Red_Hat_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
-import styles from "./layout.module.scss";
-import { Sidebar } from "@/components/layout/sidebar";
-
-const redHatDisplay = Red_Hat_Display({
-  subsets: ["latin"],
-  variable: "--font-display",
-});
+import { LayoutClient } from "./LayoutClient";
 
 export const metadata: Metadata = {
   title: "Hoop Base",
@@ -43,11 +36,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={redHatDisplay.variable}>
-        <div className={styles.layout}>
-          <Sidebar />
-          <main className={styles.main}>{children}</main>
-        </div>
+      <body>
+        <LayoutClient>{children}</LayoutClient>
         <Analytics />
       </body>
     </html>

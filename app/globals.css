@@ -75,7 +75,7 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-display), "Red Hat Display", sans-serif;
+  --font-sans: 'Bw Modelica SS02', sans-serif;
   --font-mono: "Geist Mono", "Geist Mono Fallback";
   --color-background: var(--background);
   --color-foreground: var(--foreground);

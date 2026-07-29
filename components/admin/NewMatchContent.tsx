@@ -1,346 +1,39 @@
 "use client";
 
-import type React from "react";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import Link from "next/link";
-import type { Player, MatchWithStats } from "@/lib/types";
-import {
-  PlayerAvatar,
-  SuccessIcon,
-  ErrorIcon,
-  CloseIcon,
-  PlusIcon,
-  CheckIcon,
-} from "@/components/shared";
+import type { MatchWithStats } from "@/lib/types";
+import { PlayerAvatar, SuccessIcon, ErrorIcon, CloseIcon, PlusIcon } from "@/components/shared";
+import { useMatchForm } from "./hooks/useMatchForm";
+import { PlayerSelectionModal } from "./PlayerSelectionModal";
+import { TeamStatsSection } from "./TeamStatsSection";
 import styles from "./new-match-content.module.scss";
-
-interface PlayerStatsForm {
-  playerId: string;
-  team: "team_a" | "team_b";
-  points: number;
-  rebounds: string;
-  assists: string;
-  steals: string;
-  blocks: string;
-  turnovers: string;
-}
-
-function StatNumberInput({
-  label,
-  value,
-  onChange,
-  required,
-  placeholder,
-}: {
-  label: string;
-  value: number | string;
-  onChange: (value: string) => void;
-  required?: boolean;
-  placeholder?: string;
-}) {
-  const increment = () => {
-    const num = typeof value === "string" ? Number.parseInt(value) || 0 : value;
-    onChange(String(num + 1));
-  };
-  const decrement = () => {
-    const num = typeof value === "string" ? Number.parseInt(value) || 0 : value;
-    if (num > 0) onChange(String(num - 1));
-  };
-
-  return (
-    <div className={styles.statInput}>
-      <label className={styles.statInputLabel}>{label}</label>
-      <div className={styles.statInputWrapper}>
-        <input
-          type="number"
-          min="0"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className={styles.statInputField}
-          required={required}
-          placeholder={placeholder}
-        />
-        <div className={styles.statInputButtons}>
-          <button
-            type="button"
-            className={styles.statInputButton}
-            onClick={increment}
-            tabIndex={-1}
-            aria-label="Increase"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-          </button>
-          <button
-            type="button"
-            className={styles.statInputButton}
-            onClick={decrement}
-            tabIndex={-1}
-            aria-label="Decrease"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/></svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 interface MatchFormProps {
   match?: MatchWithStats;
 }
 
 export function MatchForm({ match }: MatchFormProps) {
-  const isEditMode = !!match;
-  const router = useRouter();
-  const [players, setPlayers] = useState<Player[]>([]);
-  const [teamA, setTeamA] = useState<string[]>([]);
-  const [teamB, setTeamB] = useState<string[]>([]);
-  const [playerStats, setPlayerStats] = useState<
-    Record<string, PlayerStatsForm>
-  >({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
-  const [modalOpen, setModalOpen] = useState<"team_a" | "team_b" | null>(null);
-
-  const [formData, setFormData] = useState({
-    description: "",
-    youtube_url: match?.youtube_url || "",
-    match_date: match?.match_date || "",
-    location: match?.location || "",
-  });
-
-  useEffect(() => {
-    async function fetchPlayers() {
-      const supabase = getSupabaseBrowserClient();
-      const { data } = await supabase
-        .from("players")
-        .select("*")
-        .order("name", { ascending: true });
-
-      if (data) {
-        setPlayers(data);
-
-        // Pre-fill teams and stats if editing
-        if (match?.player_stats) {
-          const teamAIds: string[] = [];
-          const teamBIds: string[] = [];
-          const statsMap: Record<string, PlayerStatsForm> = {};
-
-          match.player_stats.forEach((stat) => {
-            if (stat.team === "team_a") {
-              teamAIds.push(stat.player_id);
-            } else {
-              teamBIds.push(stat.player_id);
-            }
-            statsMap[stat.player_id] = {
-              playerId: stat.player_id,
-              team: stat.team,
-              points: stat.points,
-              rebounds: stat.rebounds?.toString() || "",
-              assists: stat.assists?.toString() || "",
-              steals: stat.steals?.toString() || "",
-              blocks: stat.blocks?.toString() || "",
-              turnovers: stat.turnovers?.toString() || "",
-            };
-          });
-
-          setTeamA(teamAIds);
-          setTeamB(teamBIds);
-          setPlayerStats(statsMap);
-        }
-      }
-    }
-
-    fetchPlayers();
-  }, [match]);
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const addPlayerToTeam = (playerId: string, team: "team_a" | "team_b") => {
-    if (team === "team_a") {
-      setTeamB((prev) => prev.filter((id) => id !== playerId));
-    } else {
-      setTeamA((prev) => prev.filter((id) => id !== playerId));
-    }
-
-    const currentTeam = team === "team_a" ? teamA : teamB;
-    if (!currentTeam.includes(playerId)) {
-      if (team === "team_a") {
-        setTeamA((prev) => [...prev, playerId]);
-      } else {
-        setTeamB((prev) => [...prev, playerId]);
-      }
-
-      setPlayerStats((prevStats) => ({
-        ...prevStats,
-        [playerId]: {
-          playerId,
-          team,
-          points: 0,
-          rebounds: "",
-          assists: "",
-          steals: "",
-          blocks: "",
-          turnovers: "",
-        },
-      }));
-    }
-  };
-
-  const removePlayerFromTeam = (playerId: string) => {
-    setTeamA((prev) => prev.filter((id) => id !== playerId));
-    setTeamB((prev) => prev.filter((id) => id !== playerId));
-    const newStats = { ...playerStats };
-    delete newStats[playerId];
-    setPlayerStats(newStats);
-  };
-
-  const handleStatChange = (
-    playerId: string,
-    stat: keyof Omit<PlayerStatsForm, "playerId" | "team">,
-    value: string,
-  ) => {
-    if (stat === "points") {
-      const numValue = Number.parseInt(value) || 0;
-      setPlayerStats((prev) => ({
-        ...prev,
-        [playerId]: {
-          ...prev[playerId],
-          [stat]: Math.max(0, numValue),
-        },
-      }));
-    } else {
-      setPlayerStats((prev) => ({
-        ...prev,
-        [playerId]: {
-          ...prev[playerId],
-          [stat]: value,
-        },
-      }));
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    if (teamA.length === 0 && teamB.length === 0) {
-      setError("Please select at least one player for either team");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const supabase = getSupabaseBrowserClient();
-
-      let matchId: string;
-
-      if (isEditMode && match) {
-        // Update existing match
-        const { error: matchError } = await supabase
-          .from("matches")
-          .update({
-            youtube_url: formData.youtube_url || null,
-            match_date: formData.match_date,
-            location: formData.location || null,
-          })
-          .eq("id", match.id);
-
-        if (matchError) throw matchError;
-        matchId = match.id;
-
-        // Delete existing player stats and re-insert
-        const { error: deleteError } = await supabase
-          .from("player_stats")
-          .delete()
-          .eq("match_id", match.id);
-
-        if (deleteError) throw deleteError;
-      } else {
-        // Create new match
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-
-        const { data: newMatch, error: matchError } = await supabase
-          .from("matches")
-          .insert({
-            youtube_url: formData.youtube_url || null,
-            match_date: formData.match_date,
-            location: formData.location || null,
-            created_by: user?.id,
-          })
-          .select()
-          .single();
-
-        if (matchError) throw matchError;
-        matchId = newMatch.id;
-      }
-
-      const allPlayers = [...teamA, ...teamB];
-      if (allPlayers.length > 0) {
-        const statsToInsert = allPlayers.map((playerId) => {
-          const stats = playerStats[playerId];
-          return {
-            match_id: matchId,
-            player_id: playerId,
-            team: stats.team,
-            points: stats.points,
-            rebounds: stats.rebounds ? Number.parseInt(stats.rebounds) : null,
-            assists: stats.assists ? Number.parseInt(stats.assists) : null,
-            steals: stats.steals ? Number.parseInt(stats.steals) : null,
-            blocks: stats.blocks ? Number.parseInt(stats.blocks) : null,
-            turnovers: stats.turnovers
-              ? Number.parseInt(stats.turnovers)
-              : null,
-          };
-        });
-
-        const { error: statsError } = await supabase
-          .from("player_stats")
-          .insert(statsToInsert);
-
-        if (statsError) throw statsError;
-      }
-
-      setSuccess(true);
-      setTimeout(() => {
-        router.push(`/matches/${matchId}`);
-      }, 1500);
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : isEditMode
-            ? "Failed to update match"
-            : "Failed to create match",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getAvailablePlayers = (forTeam: "team_a" | "team_b") => {
-    const otherTeam = forTeam === "team_a" ? teamB : teamA;
-    return players.filter((p) => !otherTeam.includes(p.id));
-  };
-
-  const isPlayerInTeam = (playerId: string, team: "team_a" | "team_b") => {
-    return team === "team_a"
-      ? teamA.includes(playerId)
-      : teamB.includes(playerId);
-  };
-
-  const selectedPlayers = [...teamA, ...teamB];
+  const {
+    isEditMode,
+    players,
+    teamA,
+    teamB,
+    playerStats,
+    loading,
+    error,
+    success,
+    modalOpen,
+    setModalOpen,
+    formData,
+    selectedPlayers,
+    handleInputChange,
+    addPlayerToTeam,
+    removePlayerFromTeam,
+    handleStatChange,
+    handleSubmit,
+    getAvailablePlayers,
+    isPlayerInTeam,
+  } = useMatchForm(match);
 
   return (
     <>
@@ -359,9 +52,7 @@ export function MatchForm({ match }: MatchFormProps) {
         {success && (
           <div className={styles.successMessage}>
             <SuccessIcon />
-            {isEditMode
-              ? "Match updated successfully!"
-              : "Match created successfully!"}{" "}
+            {isEditMode ? "Match updated successfully!" : "Match created successfully!"}{" "}
             Redirecting...
           </div>
         )}
@@ -374,6 +65,7 @@ export function MatchForm({ match }: MatchFormProps) {
         )}
 
         <form onSubmit={handleSubmit} className={styles.form}>
+          {/* Match details */}
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>YouTube URL</label>
             <input
@@ -403,7 +95,6 @@ export function MatchForm({ match }: MatchFormProps) {
                 required
               />
             </div>
-
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Location</label>
               <input
@@ -417,234 +108,84 @@ export function MatchForm({ match }: MatchFormProps) {
             </div>
           </div>
 
-          {/* Team Selection */}
+          {/* Team selection */}
           <div className={styles.teamSelection}>
-            <div className={styles.teamColumn}>
-              <h3 className={styles.teamTitle}>Team A</h3>
-              <div className={styles.teamPlayers}>
-                {teamA.map((playerId) => {
-                  const player = players.find((p) => p.id === playerId);
-                  if (!player) return null;
-                  return (
-                    <div key={playerId} className={styles.playerChip}>
-                      <PlayerAvatar
-                        avatarUrl={player.avatar_url}
-                        name={player.name}
-                        size="md"
-                      />
-                      <button
-                        type="button"
-                        className={styles.removePlayer}
-                        onClick={() => removePlayerFromTeam(playerId)}
-                      >
-                        <CloseIcon />
-                      </button>
-                    </div>
-                  );
-                })}
-                <button
-                  type="button"
-                  className={styles.addPlayerButton}
-                  onClick={() => setModalOpen("team_a")}
-                >
-                  <PlusIcon />
-                </button>
-              </div>
-            </div>
-
+            {(["team_a", "team_b"] as const).map((team) => {
+              const teamIds = team === "team_a" ? teamA : teamB;
+              const label = team === "team_a" ? "Team A" : "Team B";
+              return (
+                <div key={team} className={styles.teamColumn}>
+                  <h3 className={styles.teamTitle}>{label}</h3>
+                  <div className={styles.teamPlayers}>
+                    {teamIds.map((playerId) => {
+                      const player = players.find((p) => p.id === playerId);
+                      if (!player) return null;
+                      return (
+                        <div key={playerId} className={styles.playerChip}>
+                          <PlayerAvatar avatarUrl={player.avatar_url} name={player.name} size="md" />
+                          <button
+                            type="button"
+                            className={styles.removePlayer}
+                            onClick={() => removePlayerFromTeam(playerId)}
+                          >
+                            <CloseIcon />
+                          </button>
+                        </div>
+                      );
+                    })}
+                    <button
+                      type="button"
+                      className={styles.addPlayerButton}
+                      onClick={() => setModalOpen(team)}
+                    >
+                      <PlusIcon />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
             <div className={styles.vsText}>vs</div>
-
-            <div className={styles.teamColumn}>
-              <h3 className={styles.teamTitle}>Team B</h3>
-              <div className={styles.teamPlayers}>
-                {teamB.map((playerId) => {
-                  const player = players.find((p) => p.id === playerId);
-                  if (!player) return null;
-                  return (
-                    <div key={playerId} className={styles.playerChip}>
-                      <PlayerAvatar
-                        avatarUrl={player.avatar_url}
-                        name={player.name}
-                        size="md"
-                      />
-                      <button
-                        type="button"
-                        className={styles.removePlayer}
-                        onClick={() => removePlayerFromTeam(playerId)}
-                      >
-                        <CloseIcon />
-                      </button>
-                    </div>
-                  );
-                })}
-                <button
-                  type="button"
-                  className={styles.addPlayerButton}
-                  onClick={() => setModalOpen("team_b")}
-                >
-                  <PlusIcon />
-                </button>
-              </div>
-            </div>
           </div>
 
-          {/* Player Selection Modal */}
           {modalOpen && (
-            <div
-              className={styles.modalOverlay}
-              onClick={() => setModalOpen(null)}
-            >
-              <div
-                className={styles.modal}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className={styles.modalHeader}>
-                  <h3>
-                    Add Players to{" "}
-                    {modalOpen === "team_a" ? "Team A" : "Team B"}
-                  </h3>
-                  <button
-                    type="button"
-                    className={styles.modalClose}
-                    onClick={() => setModalOpen(null)}
-                  >
-                    <CloseIcon />
-                  </button>
-                </div>
-                <div className={styles.modalContent}>
-                  {getAvailablePlayers(modalOpen).map((player) => {
-                    const isSelected = isPlayerInTeam(player.id, modalOpen);
-                    return (
-                      <button
-                        key={player.id}
-                        type="button"
-                        className={`${styles.playerOption} ${isSelected ? styles.selected : ""}`}
-                        onClick={() => {
-                          if (isSelected) {
-                            removePlayerFromTeam(player.id);
-                          } else {
-                            addPlayerToTeam(player.id, modalOpen);
-                          }
-                        }}
-                      >
-                        <PlayerAvatar
-                          avatarUrl={player.avatar_url}
-                          name={player.name}
-                          size="sm"
-                        />
-                        <span className={styles.optionName}>
-                          {player.name || "Unknown"}
-                        </span>
-                        {isSelected && <CheckIcon />}
-                      </button>
-                    );
-                  })}
-                </div>
-                <div className={styles.modalFooter}>
-                  <button
-                    type="button"
-                    className={styles.submitButton}
-                    onClick={() => setModalOpen(null)}
-                  >
-                    Done
-                  </button>
-                </div>
-              </div>
-            </div>
+            <PlayerSelectionModal
+              team={modalOpen}
+              players={getAvailablePlayers(modalOpen)}
+              isPlayerInTeam={isPlayerInTeam}
+              onAdd={addPlayerToTeam}
+              onRemove={removePlayerFromTeam}
+              onClose={() => setModalOpen(null)}
+            />
           )}
 
-          {/* Stats Entry */}
           {selectedPlayers.length > 0 && (
             <div className={styles.statsEntry}>
               <div className={styles.teamsWrapper}>
-                {teamA.length > 0 && (
-                  <div style={{ marginBottom: "1.5rem" }}>
-                    <h4 className={`${styles.teamHeader} ${styles.teamA}`}>
-                      Team A
-                    </h4>
-                    {teamA.map((playerId) => {
-                      const player = players.find((p) => p.id === playerId);
-                      const stats = playerStats[playerId];
-                      if (!player || !stats) return null;
-
-                      return (
-                        <div key={playerId} className={styles.playerStatRow}>
-                          <div className={styles.playerStatHeader}>
-                            <PlayerAvatar
-                              avatarUrl={player.avatar_url}
-                              name={player.name}
-                              size="md"
-                            />
-                            <span className={styles.playerStatName}>
-                              {player.name}
-                            </span>
-                          </div>
-                          <div className={styles.playerStatInputs}>
-                            <StatNumberInput label="PTS" value={stats.points} onChange={(v) => handleStatChange(playerId, "points", v)} required />
-                            <StatNumberInput label="REB" value={stats.rebounds} onChange={(v) => handleStatChange(playerId, "rebounds", v)} placeholder="-" />
-                            <StatNumberInput label="AST" value={stats.assists} onChange={(v) => handleStatChange(playerId, "assists", v)} placeholder="-" />
-                            <StatNumberInput label="STL" value={stats.steals} onChange={(v) => handleStatChange(playerId, "steals", v)} placeholder="-" />
-                            <StatNumberInput label="BLK" value={stats.blocks} onChange={(v) => handleStatChange(playerId, "blocks", v)} placeholder="-" />
-                            <StatNumberInput label="TO" value={stats.turnovers} onChange={(v) => handleStatChange(playerId, "turnovers", v)} placeholder="-" />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-
-                {teamB.length > 0 && (
-                  <div>
-                    <h4 className={`${styles.teamHeader} ${styles.teamB}`}>
-                      Team B
-                    </h4>
-                    {teamB.map((playerId) => {
-                      const player = players.find((p) => p.id === playerId);
-                      const stats = playerStats[playerId];
-                      if (!player || !stats) return null;
-
-                      return (
-                        <div key={playerId} className={styles.playerStatRow}>
-                          <div className={styles.playerStatHeader}>
-                            <PlayerAvatar
-                              avatarUrl={player.avatar_url}
-                              name={player.name}
-                              size="md"
-                            />
-                            <span className={styles.playerStatName}>
-                              {player.name}
-                            </span>
-                          </div>
-                          <div className={styles.playerStatInputs}>
-                            <StatNumberInput label="PTS" value={stats.points} onChange={(v) => handleStatChange(playerId, "points", v)} required />
-                            <StatNumberInput label="REB" value={stats.rebounds} onChange={(v) => handleStatChange(playerId, "rebounds", v)} placeholder="-" />
-                            <StatNumberInput label="AST" value={stats.assists} onChange={(v) => handleStatChange(playerId, "assists", v)} placeholder="-" />
-                            <StatNumberInput label="STL" value={stats.steals} onChange={(v) => handleStatChange(playerId, "steals", v)} placeholder="-" />
-                            <StatNumberInput label="BLK" value={stats.blocks} onChange={(v) => handleStatChange(playerId, "blocks", v)} placeholder="-" />
-                            <StatNumberInput label="TO" value={stats.turnovers} onChange={(v) => handleStatChange(playerId, "turnovers", v)} placeholder="-" />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+                <TeamStatsSection
+                  label="Team A"
+                  teamStyle={styles.teamA}
+                  playerIds={teamA}
+                  players={players}
+                  playerStats={playerStats}
+                  onStatChange={handleStatChange}
+                />
+                <TeamStatsSection
+                  label="Team B"
+                  teamStyle={styles.teamB}
+                  playerIds={teamB}
+                  players={players}
+                  playerStats={playerStats}
+                  onStatChange={handleStatChange}
+                />
               </div>
             </div>
           )}
 
           <div className={styles.formActions}>
-            <button
-              type="submit"
-              className={styles.submitButton}
-              disabled={loading}
-            >
+            <button type="submit" className={styles.submitButton} disabled={loading}>
               {loading
-                ? isEditMode
-                  ? "Updating..."
-                  : "Creating..."
-                : isEditMode
-                  ? "Update Match"
-                  : "Create Match"}
+                ? isEditMode ? "Updating..." : "Creating..."
+                : isEditMode ? "Update Match" : "Create Match"}
             </button>
             <Link
               href={isEditMode && match ? `/matches/${match.id}` : "/matches"}
@@ -659,7 +200,6 @@ export function MatchForm({ match }: MatchFormProps) {
   );
 }
 
-// Alias for backwards compatibility
 export function NewMatchContent() {
   return <MatchForm />;
 }
