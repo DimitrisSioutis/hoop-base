@@ -19,19 +19,62 @@
   @include button-primary;
 }
 
+.viewToggle {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  margin-bottom: $spacing-6;
+}
+
+.sizeToggle {
+  @media (max-width: $breakpoint-sm) {
+    display: none;
+  }
+}
+
+.viewToggleLabel {
+  font-size: $font-size-sm;
+  color: $color-text-muted;
+  margin-right: $spacing-2;
+}
+
+.viewButton {
+  @include button-base;
+  background: transparent;
+  color: $color-text-secondary;
+  border: 1px solid $color-border;
+  padding: 5px 10px;
+  min-width: 50px;
+  height: 40px;
+
+  &:hover:not(:disabled) {
+    color: $color-text-primary;
+    border-color: $color-border-light;
+  }
+}
+
+.viewButtonActive {
+  background: transparent;
+  color: $color-text-primary;
+  border-color: $color-primary;
+
+  &:hover:not(:disabled) {
+    color: $color-text-primary;
+    border-color: $color-primary-hover;
+  }
+}
+
 .yearGroup {
-  margin-bottom: $spacing-10;
+  margin-bottom: $spacing-4;
   overflow-x: auto;
   h1 {
     font-family: $font-family-display;
-    font-size: $font-size-4xl;
+    font-size: $font-size-2xl;
     font-weight: $font-weight-bold;
     color: $color-green;
-    margin-bottom: $spacing-4;
   }
 
   .monthGroup {
-    margin-bottom: $spacing-8;
     h2 {
       font-family: $font-family-display;
       font-size: $font-size-xl;
@@ -42,7 +85,7 @@
 
     .monthWrapper {
       display: flex;
-      gap: 20px;
+      gap: 10px;
       overflow-x: auto;
       max-width: 100%;
       padding-bottom: $spacing-2;
@@ -70,9 +113,13 @@
         filter: brightness(1.2);
       }
 
-      // Firefox
       scrollbar-width: thin;
       scrollbar-color: $color-green transparent;
+
+      &.monthWrapperGrid {
+        flex-wrap: wrap;
+        overflow-x: visible;
+      }
     }
   }
 }

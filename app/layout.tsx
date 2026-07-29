@@ -2,6 +2,7 @@ import type React from "react";
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+import "./styles/globals.scss";
 import { LayoutClient } from "./LayoutClient";
 
 export const metadata: Metadata = {

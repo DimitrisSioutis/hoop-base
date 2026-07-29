@@ -4,9 +4,20 @@
 .matchCard {
   display: block;
   padding: 0;
-  width: 500px;
   flex-shrink: 0;
   cursor: pointer;
+}
+
+.cardSizeSmall {
+  width: 30%;
+
+  @media (max-width: $breakpoint-sm) {
+    width: 100%;
+  }
+}
+
+.cardSizeBig {
+  width: 100%;
 }
 
 .thumbnail {
@@ -77,11 +88,11 @@
   .score {
     font-size: smaller;
     .win {
-      color: $color-success;
+      color: white;
     }
 
     .loss {
-      color: $color-error;
+      color: rgba(255, 255, 255, 0.5);
     }
   }
 }
@@ -119,7 +130,7 @@
   display: flex;
   align-items: center;
   gap: $spacing-4;
-  font-size: $font-size-sm;
+  font-size: $font-size-xs;
   color: $color-text-muted;
   margin-bottom: $spacing-4;
 }

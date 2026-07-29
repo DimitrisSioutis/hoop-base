@@ -9,6 +9,16 @@ import {
 } from "@/components/shared";
 import styles from "./match-card.module.scss";
 
+export enum CardSize {
+  Small = "small",
+  Big = "big",
+}
+
+const cardSizeClass: Record<CardSize, string> = {
+  [CardSize.Small]: styles.cardSizeSmall,
+  [CardSize.Big]: styles.cardSizeBig,
+};
+
 interface MatchCardProplayer {
   match: {
     id: string;
@@ -17,6 +27,7 @@ interface MatchCardProplayer {
     location: string | null;
     teams?: any;
   };
+  size?: CardSize;
 }
 
 function getInitials(name: string): string {
@@ -54,9 +65,9 @@ function TeamDisplay({ players }: { players: any[] }) {
   );
 }
 
-export function MatchCard({ match }: MatchCardProplayer) {
+export function MatchCard({ match, size = CardSize.Small }: MatchCardProplayer) {
   return (
-    <Link href={`/matches/${match.id}`} className={styles.matchCard}>
+    <Link href={`/matches/${match.id}`} className={`${styles.matchCard} ${cardSizeClass[size]}`}>
       <div className={styles.thumbnail}>
         <img
           src={
@@ -72,10 +83,7 @@ export function MatchCard({ match }: MatchCardProplayer) {
         <h2 className={styles.matchTitle}>
           <>
             <TeamDisplay players={match.teams?.teamA.players} />
-            <span className={styles.vs}> vs </span>
-            <TeamDisplay players={match.teams?.teamB.players} />
-            &nbsp;
-            <span className={styles.score}>
+              <span className={styles.score}>
               <span
                 className={
                   match.teams?.teamA.points > match.teams?.teamB.points
@@ -85,7 +93,7 @@ export function MatchCard({ match }: MatchCardProplayer) {
               >
                 {match.teams?.teamA.points}
               </span>
-              &nbsp;-&nbsp;
+              <span className={styles.vs}> vs </span>
               <span
                 className={
                   match.teams?.teamB.points > match.teams?.teamA.points
@@ -96,6 +104,9 @@ export function MatchCard({ match }: MatchCardProplayer) {
                 {match.teams?.teamB.points}
               </span>
             </span>
+            <TeamDisplay players={match.teams?.teamB.players} />
+            &nbsp;
+
           </>
         </h2>
         <div className={styles.matchMeta}>
