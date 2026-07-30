@@ -161,13 +161,6 @@ export const VerticalIcon = () => (
   </svg>
 )
 
-export const FilterMatchesViewIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.6">
-    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-    <circle cx="12" cy="12" r="3" />
-  </svg>
-)
-
 export const BigSizeIcon = () => (
   <svg width="15" height="15" viewBox="0 0 100 100" fill="none">
     <rect y="10" x="5" width="90" height="60" rx="10" fill="white" />

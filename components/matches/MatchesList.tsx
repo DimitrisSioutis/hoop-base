@@ -7,7 +7,6 @@ import {
   formatDate,
   VerticalIcon,
   LinearIcon,
-  FilterMatchesViewIcon,
   MonthViewIcon,
   YearViewIcon,
   BigSizeIcon,
@@ -75,7 +74,6 @@ export function MatchesList({
       </header>
 
       <div className={styles.viewToggle}>
-        <FilterMatchesViewIcon />
         <button
           className={`${styles.viewButton} ${view === ViewType.Month ? styles.viewButtonActive : ''}`}
           onClick={() => setView(ViewType.Month)}
