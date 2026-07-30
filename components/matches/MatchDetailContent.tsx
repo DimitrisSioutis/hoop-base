@@ -16,6 +16,7 @@ interface PlayerStat {
   player: {
     id: string
     name: string
+    slug: string
     avatar_url: string | null
   } | null
 }

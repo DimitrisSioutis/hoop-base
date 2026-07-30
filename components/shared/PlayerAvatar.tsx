@@ -7,33 +7,30 @@ interface PlayerAvatarProps {
   avatarUrl: string | null | undefined
   name: string | null | undefined
   size?: AvatarSize
-  stacked?: boolean
-  className?: string
 }
 
 export function PlayerAvatar({
   avatarUrl,
   name,
-  size = "md",
-  stacked = false,
-  className = ""
+  size
 }: PlayerAvatarProps) {
-  const sizeClass = styles[size]
-  const stackedClass = stacked ? styles.stacked : ""
+  // No size => percentage-based, fills whatever width its parent gives it (e.g. MatchCard's TeamDisplay)
+  const sizeClass = size ? styles[size] : styles.fluid
 
   if (avatarUrl) {
     return (
-      <img
-        src={avatarUrl}
-        alt=""
-        className={`${styles.avatar} ${sizeClass} ${stackedClass} ${className}`.trim()}
-        title={name ?? undefined}
-      />
+      <div className={`${styles.avatar} ${sizeClass}`}>
+        <img
+          src={avatarUrl}
+          alt=""
+          title={name ?? undefined}
+        />
+      </div>
     )
   }
 
   return (
-    <div className={`${styles.avatarFallback} ${sizeClass} ${stackedClass} ${className}`.trim()}>
+    <div className={`${styles.avatarFallback} ${sizeClass}`}>
       {getInitials(name ?? null)}
     </div>
   )

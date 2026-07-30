@@ -46,12 +46,12 @@ function TeamDisplay({ players }: { players: any[] }) {
           <span
             key={`${player.team}-${player.name}`}
             className={styles.playerInTitle}
+            style={{width: `${100/players.length}%`}}
           >
             {player.avatar_url ? (
               <PlayerAvatar
                 avatarUrl={player.avatar_url}
                 name={player.name}
-                size="xs"
               />
             ) : (
               <span className={styles.initials}>
@@ -75,7 +75,7 @@ export function MatchCard({ match, size = CardSize.Small }: MatchCardProplayer) 
           }
           alt=""
         />
-        <div className={styles.playIcon}>
+        <div className={`${styles.playIcon} ${size === CardSize.Small ? styles.playIconSmall : styles.playIconBig}`}>
           <PlayIcon />
         </div>
       </div>
@@ -105,8 +105,6 @@ export function MatchCard({ match, size = CardSize.Small }: MatchCardProplayer) 
               </span>
             </span>
             <TeamDisplay players={match.teams?.teamB.players} />
-            &nbsp;
-
           </>
         </h2>
         <div className={styles.matchMeta}>

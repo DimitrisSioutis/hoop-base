@@ -52,21 +52,29 @@
   transform: translate(-50%, -50%);
   width: 60px;
   height: 60px;
-  background: rgba($color-primary, 0.9);
-  border-radius: $radius-full;
   color: $color-text-primary;
   z-index: 1;
   transition: all $transition-fast;
 
   svg {
-    width: 28px;
-    height: 28px;
+    width: 40px;
+    height: 40px;
     margin-left: 4px;
   }
 
   .matchCard:hover & {
-    background: $color-primary;
     transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  &.playIconSmall {
+    width: 30px;
+    height: 30px;
+
+    svg{
+      width: 20px;
+      height: 20px;
+      margin-left: 2px;
+    }
   }
 }
 
@@ -82,15 +90,13 @@
   margin-bottom: $spacing-2;
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: $spacing-1;
+  justify-content: space-between;
 
   .score {
     font-size: smaller;
     .win {
       color: white;
     }
-
     .loss {
       color: rgba(255, 255, 255, 0.5);
     }
@@ -98,14 +104,20 @@
 }
 
 .teamDisplay {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: $spacing-1;
+  justify-content: space-between;
+  width: 35%;
+  gap: 2%;
 }
 
 .playerInTitle {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
+  border: 1px solid $color-primary;
+  border-radius: $radius-full;
+  height: max-content;
 }
 
 .initials {

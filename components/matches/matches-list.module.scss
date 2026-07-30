@@ -39,13 +39,14 @@
 }
 
 .viewButton {
-  @include button-base;
+  cursor: pointer;
+  border-radius: 5px;
   background: transparent;
   color: $color-text-secondary;
   border: 1px solid $color-border;
-  padding: 5px 10px;
-  min-width: 50px;
-  height: 40px;
+  padding: 2px 5px;
+  min-width: 20px;
+  height: 24px;
 
   &:hover:not(:disabled) {
     color: $color-text-primary;

@@ -66,6 +66,10 @@
 
 .matchHeader {
   padding: $spacing-6;
+
+  @media (max-width: $breakpoint-sm) {
+    padding: 0;
+  }
 }
 
 .matchTitle {
@@ -81,6 +85,10 @@
   align-items: center;
   gap: $spacing-6;
   flex-wrap: wrap;
+
+  @media (max-width: $breakpoint-sm) {
+    gap: $spacing-2;
+  }
 }
 
 .metaItem {
@@ -89,6 +97,10 @@
   gap: $spacing-2;
   font-size: $font-size-sm;
   color: $color-text-secondary;
+
+  @media (max-width: $breakpoint-sm) {
+    font-size: $font-size-xs;
+  }
 
   svg {
     width: 16px;

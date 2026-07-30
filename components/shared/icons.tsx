@@ -109,16 +109,16 @@ export const BannedIcon = () => (
   </svg>
 )
 
-export const VerticalIcon = () => (
-  <svg width="25" height="25" viewBox="0 0 100 100" fill="none">
+export const LinearIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 100 100" fill="none">
     <rect x="5" y="4" width="90" height="24" rx="2" fill="white" />
     <rect x="5" y="38" width="90" height="24" rx="2" fill="white" />
     <rect x="5" y="72" width="90" height="24" rx="2" fill="white" />
   </svg>
 )
 
-export const LinearIcon = () => (
-  <svg width="25" height="25" viewBox="0 0 100 100" fill="none">
+export const VerticalIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 100 100" fill="none">
     <rect x="5" y="5" width="24" height="24" rx="4" fill="white" />
     <rect x="38" y="5" width="24" height="24" rx="4" fill="white" />
     <rect x="71" y="5" width="24" height="24" rx="4" fill="white" />
@@ -132,21 +132,21 @@ export const LinearIcon = () => (
 )
 
 export const FilterMatchesViewIcon = () => (
-  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
     <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
     <circle cx="12" cy="12" r="3" />
   </svg>
 )
 
 export const BigSizeIcon = () => (
-  <svg width="30" height="30" viewBox="0 0 100 100" fill="none">
+  <svg width="15" height="15" viewBox="0 0 100 100" fill="none">
     <rect y="10" x="5" width="90" height="60" rx="10" fill="white" />
     <polygon points="44,33 56,40 44,47" fill="black" />
   </svg>
 )
 
 export const SmallSizeIcon = () => (
-  <svg width="30" height="30" viewBox="0 0 100 100" fill="none">
+  <svg width="15" height="15" viewBox="0 0 100 100" fill="none">
     <rect y="10" x="5" width="45" height="30" rx="5" fill="white" />
     <polygon points="24.5,21.5 30.5,25 24.5,28.5" fill="black" />
   </svg>
