@@ -79,7 +79,7 @@
 }
 
 .matchInfo {
-  padding: $spacing-5;
+  padding: $spacing-4 $spacing-2 0;
 }
 
 .matchTitle {
@@ -115,20 +115,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid $color-primary;
+  border: 1px solid $color-text-primary;
   border-radius: $radius-full;
-  height: max-content;
+  width: 20%;
+  aspect-ratio: 1;
+  flex-shrink: 0;
 }
 
 .initials {
   font-size: $font-size-sm;
   font-weight: $font-weight-semibold;
   color: $color-text-secondary;
-}
 
-.separator {
-  color: $color-text-muted;
-  margin-right: $spacing-1;
+  .cardSizeSmall & {
+    font-size: $font-size-xs;
+  }
 }
 
 .vs {
@@ -158,20 +159,3 @@
   }
 }
 
-.playerAvatars {
-  display: flex;
-  align-items: center;
-}
-
-.morePlayersCount {
-  @include flex-center;
-  width: 28px;
-  height: 28px;
-  border-radius: $radius-full;
-  border: 2px solid $color-surface;
-  margin-left: -8px;
-  background: $color-surface-elevated;
-  font-size: $font-size-xs;
-  font-weight: $font-weight-semibold;
-  color: $color-text-secondary;
-}

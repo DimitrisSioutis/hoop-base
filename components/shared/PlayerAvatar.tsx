@@ -1,7 +1,7 @@
 import { getInitials } from "./utils"
 import styles from "./player-avatar.module.scss"
 
-type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | "xxxl"
+type AvatarSize = "sm" | "md" | "lg" | "xl" | "xxl" | "xxxl"
 
 interface PlayerAvatarProps {
   avatarUrl: string | null | undefined

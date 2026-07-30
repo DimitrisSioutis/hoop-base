@@ -51,20 +51,3 @@ export interface MatchWithStats extends Match {
   player_stats: PlayerStatsWithPlayer[]
 }
 
-export interface PlayerAverages {
-  player_id: string
-  player: Player
-  games_played: number
-  avg_points: number
-  avg_rebounds: number
-  avg_assists: number
-  avg_steals: number
-  avg_blocks: number
-  avg_turnovers: number
-  total_points: number
-  total_rebounds: number
-  total_assists: number
-  total_steals: number
-  total_blocks: number
-  total_turnovers: number
-}

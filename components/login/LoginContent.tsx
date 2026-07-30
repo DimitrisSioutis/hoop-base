@@ -69,7 +69,7 @@ function LoginLoading() {
         <div className={styles.header}>
           <img src="/logo.jpeg" alt="Hoop Base Logo" className={styles.logo} />
           <h1 className={styles.title}>Hoops Tracker</h1>
-          <p className={styles.subtitle}>Loading...</p>
+          <p>Loading...</p>
         </div>
       </div>
     </main>

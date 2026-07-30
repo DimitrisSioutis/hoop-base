@@ -62,17 +62,14 @@ export function MatchesList({
   const [view, setView] = useState<ViewType>(ViewType.Month);
   const [layout, setLayout] = useState<LayoutType>(LayoutType.Linear);
   const [cardSize, setCardSize] = useState<CardSize>(CardSize.Small);
-  useEffect(() => {
-    console.log('matchesFormattedByYear', matchesFormattedByYear);
-  }, [matchesFormattedByYear]);
+
   return (
     <>
       <header className={styles.header}>
         <h1 className={styles.title}>Matches</h1>
         {isAdmin && (
-          <Link href="/admin/matches/new" className={styles.addButton}>
+          <Link href="/admin/matches/new">
             <PlusIcon />
-            Add Match
           </Link>
         )}
       </header>
@@ -117,7 +114,7 @@ export function MatchesList({
         </button>
       </div>
 
-      <div className={styles.matchesContainer}>
+      <div>
         {matchesFormattedByYear && matchesFormattedByYear.length > 0 ? (
           matchesFormattedByYear.map((yearGroup, index) => (
             <div key={index} className={styles.yearGroup}>

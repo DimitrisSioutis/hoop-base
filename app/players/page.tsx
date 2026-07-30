@@ -1,7 +1,6 @@
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/layout/sidebar";
 import { PlayersList } from "@/components/players";
-import styles from "./players.module.scss";
 
 export default async function PlayersPage() {
   const supabase = await getSupabaseServerClient();

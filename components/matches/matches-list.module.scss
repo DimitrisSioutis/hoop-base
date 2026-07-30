@@ -15,10 +15,6 @@
   color: $color-text-primary;
 }
 
-.addButton {
-  @include button-primary;
-}
-
 .viewToggle {
   display: flex;
   align-items: center;
@@ -26,42 +22,26 @@
   margin-bottom: $spacing-6;
 }
 
-.sizeToggle {
-  @media (max-width: $breakpoint-sm) {
-    display: none;
-  }
-}
-
-.viewToggleLabel {
-  font-size: $font-size-sm;
-  color: $color-text-muted;
-  margin-right: $spacing-2;
-}
-
 .viewButton {
   cursor: pointer;
   border-radius: 5px;
   background: transparent;
-  color: $color-text-secondary;
   border: 1px solid $color-border;
   padding: 2px 5px;
   min-width: 20px;
   height: 24px;
 
   &:hover:not(:disabled) {
-    color: $color-text-primary;
     border-color: $color-border-light;
   }
 }
 
 .viewButtonActive {
   background: transparent;
-  color: $color-text-primary;
-  border-color: $color-primary;
+  border-color: $color-green;
 
   &:hover:not(:disabled) {
-    color: $color-text-primary;
-    border-color: $color-primary-hover;
+    border-color: $color-green;
   }
 }
 
@@ -76,12 +56,13 @@
   }
 
   .monthGroup {
+    margin-top: $spacing-6;
     h2 {
       font-family: $font-family-display;
       font-size: $font-size-xl;
       font-weight: $font-weight-semibold;
       color: $color-text-primary;
-      margin-bottom: $spacing-4;
+      margin-bottom: $spacing-2;
     }
 
     .monthWrapper {

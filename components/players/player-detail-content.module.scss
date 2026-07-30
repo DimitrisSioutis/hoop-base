@@ -62,17 +62,6 @@
   text-transform: uppercase;
 }
 
-.jerseyNumber {
-  @include flex-center;
-  padding: $spacing-2 $spacing-4;
-  background: $color-primary;
-  border-radius: $radius-md;
-  font-family: $font-family-display;
-  font-size: $font-size-xl;
-  font-weight: $font-weight-bold;
-  color: $color-text-primary;
-}
-
 .meta {
   display: flex;
   gap: $spacing-6;

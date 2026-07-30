@@ -1,44 +1,6 @@
 @use "../../app/styles/variables" as *;
 @use "../../app/styles/mixins" as *;
 
-.header {
-  margin-bottom: $spacing-8;
-}
-
-.title {
-  font-family: $font-family-display;
-  font-size: $font-size-3xl;
-  font-weight: $font-weight-bold;
-  color: $color-text-primary;
-  margin-bottom: $spacing-2;
-}
-
-.subtitle {
-  font-size: $font-size-base;
-  color: $color-text-secondary;
-}
-
-.tabs {
-  display: flex;
-  gap: $spacing-2;
-  margin-bottom: $spacing-8;
-  overflow-x: auto;
-  padding-bottom: $spacing-2;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.tab {
-  @include button-base;
-  padding: $spacing-3 $spacing-5;
-  background: transparent;
-  color: $color-text-secondary;
-  border: 1px solid $color-border;
-  white-space: nowrap;
-}
-
 .tableHeader {
   display: grid;
   grid-template-columns: 0.2fr 1fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr;
@@ -143,11 +105,6 @@
   font-weight: $font-weight-semibold;
   color: $color-text-primary;
   @include truncate;
-}
-
-.playerMeta {
-  font-size: $font-size-xs;
-  color: $color-text-muted;
 }
 
 .statCell {

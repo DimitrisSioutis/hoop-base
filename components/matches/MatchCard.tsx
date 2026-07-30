@@ -75,7 +75,7 @@ export function MatchCard({ match, size = CardSize.Small }: MatchCardProplayer) 
           }
           alt=""
         />
-        <div className={`${styles.playIcon} ${size === CardSize.Small ? styles.playIconSmall : styles.playIconBig}`}>
+        <div className={`${styles.playIcon} ${size === CardSize.Small ? styles.playIconSmall : ''}`}>
           <PlayIcon />
         </div>
       </div>

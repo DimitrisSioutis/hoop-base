@@ -101,7 +101,7 @@ export function LeaderboardContent() {
 
   return (
     <>
-      <div className={styles.leaderboardCard}>
+      <div>
         {!loading && sortedPlayers.length > 0 ? (
           <>
             <div className={styles.tableHeader}>
