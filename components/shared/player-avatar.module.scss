@@ -66,12 +66,13 @@
 }
 
 .xxxl {
-  width: 140px;
-  height: 140px;
+  width: 200px;
+  height: auto;
   font-size: $font-size-4xl;
-  border: 4px solid $color-primary;
+  border-radius: 0;
 
-  &.avatarFallback {
-    border: none;
+  img {
+    height: auto;
+    object-fit: contain;
   }
 }

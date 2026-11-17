@@ -21,10 +21,10 @@
 }
 
 .profileHeader {
+  position: relative;
   display: flex;
   gap: $spacing-8;
-  margin-bottom: $spacing-8;
-  padding: $spacing-8;
+  overflow: hidden;
 
   @media (max-width: $breakpoint-md) {
     flex-direction: column;
@@ -33,25 +33,44 @@
   }
 }
 
+// Decorative angled color blocks, bottom-right corner
+.headerShapeA,
+.headerShapeB {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.headerShapeA {
+  width: 45%;
+  height: 70%;
+  background: $color-primary;
+  opacity: 0.12;
+  clip-path: polygon(100% 0, 100% 100%, 15% 100%);
+}
+
+.headerShapeB {
+  width: 28%;
+  height: 40%;
+  background: $color-green;
+  opacity: 0.14;
+  clip-path: polygon(100% 40%, 100% 100%, 30% 100%);
+}
+
 .avatarSection {
+  position: relative;
+  z-index: 1;
   flex-shrink: 0;
 }
 
 .infoSection {
   @include flex-column;
-  gap: $spacing-4;
+  position: relative;
+  z-index: 1;
+  gap: $spacing-3;
   flex: 1;
-}
-
-.nameRow {
-  display: flex;
-  align-items: center;
-  gap: $spacing-4;
-  flex-wrap: wrap;
-
-  @media (max-width: $breakpoint-md) {
-    justify-content: center;
-  }
 }
 
 .name {
@@ -60,6 +79,28 @@
   font-weight: $font-weight-bold;
   color: $color-text-primary;
   text-transform: uppercase;
+}
+
+.subtitle {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+
+  @media (max-width: $breakpoint-md) {
+    justify-content: center;
+  }
+}
+
+.dot {
+  color: $color-text-muted;
+}
+
+.divider {
+  height: 1px;
+  background: $color-border;
+  margin: $spacing-2 0;
 }
 
 .meta {
@@ -102,55 +143,58 @@
   grid-template-columns: repeat(7, 1fr);
   gap: $spacing-4;
   margin-bottom: $spacing-8;
-  @include bordered-box;
+  background: $color-surface-elevated;
+  padding: $spacing-6 $spacing-4;
 
   @media (max-width: $breakpoint-lg) {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    gap: $spacing-6 $spacing-4;
   }
 
   @media (max-width: $breakpoint-sm) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-.statCard {
+.statRing {
   @include flex-column;
   align-items: center;
-  text-align: center;
-  padding: $spacing-6;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  aspect-ratio: 1;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid $color-border-light;
+  margin: 0 auto;
+
+  &.statRingHighlight {
+    border-color: $color-primary;
+  }
 }
 
 .statValue {
   font-family: $font-family-display;
-  font-size: $font-size-3xl;
+  font-size: $font-size-xl;
   font-weight: $font-weight-bold;
-  color: $color-primary;
+  color: $color-text-primary;
+  line-height: 1.2;
 }
 
 .statLabel {
-  font-size: $font-size-xs;
+  font-size: 10px;
   font-weight: $font-weight-medium;
   color: $color-text-muted;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-top: $spacing-1;
+  line-height: 1.2;
 }
 
 .section {
   margin-bottom: $spacing-6;
+  background: $color-surface-elevated;
 }
 
-.sectionHeader {
-  @include flex-between;
-  margin-bottom: $spacing-6;
-}
-
-.sectionTitle {
-  font-family: $font-family-display;
-  font-size: $font-size-lg;
-  font-weight: $font-weight-semibold;
-  color: $color-text-primary;
-}
 
 .tableHeader {
   display: grid;
@@ -188,7 +232,6 @@
   gap: $spacing-4;
   padding: $spacing-4;
   background: $color-surface-elevated;
-  border-radius: $radius-md;
   align-items: center;
   transition: background $transition-fast;
 

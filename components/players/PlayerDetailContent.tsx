@@ -55,6 +55,9 @@ export function PlayerDetailContent({ player, gameStats, averages, gamesPlayed, 
       </Link>
 
       <div className={styles.profileHeader}>
+        <div className={styles.headerShapeA} />
+        <div className={styles.headerShapeB} />
+
         <div className={styles.avatarSection}>
           <PlayerAvatar
             avatarUrl={player.avatar_url}
@@ -63,9 +66,17 @@ export function PlayerDetailContent({ player, gameStats, averages, gamesPlayed, 
           />
         </div>
         <div className={styles.infoSection}>
-          <div className={styles.nameRow}>
-            <h1 className={styles.name}>{player.nickname || player.name || "Unknown"}</h1>
-          </div>
+          <h1 className={styles.name}>{player.nickname || player.name || "Unknown"}</h1>
+          {(player.jersey_number != null || player.position) && (
+            <div className={styles.subtitle}>
+              {player.jersey_number != null && <span>#{player.jersey_number}</span>}
+              {player.jersey_number != null && player.position && <span className={styles.dot}>&middot;</span>}
+              {player.position && <span>{player.position}</span>}
+            </div>
+          )}
+
+          <div className={styles.divider} />
+
           <div className={styles.meta}>
             <div className={styles.metaItem}>
               <span className={styles.metaLabel}>Record</span>
@@ -86,41 +97,37 @@ export function PlayerDetailContent({ player, gameStats, averages, gamesPlayed, 
       </div>
 
       <div className={styles.statsOverview}>
-        <div className={styles.statCard}>
+        <div className={styles.statRing}>
           <span className={styles.statValue}>{averages.points}</span>
-          <span className={styles.statLabel}>PPG</span>
+          <span className={styles.statLabel}>PTS</span>
         </div>
-        <div className={styles.statCard}>
+        <div className={styles.statRing}>
           <span className={styles.statValue}>{averages.rebounds}</span>
-          <span className={styles.statLabel}>RPG</span>
+          <span className={styles.statLabel}>REB</span>
         </div>
-        <div className={styles.statCard}>
+        <div className={styles.statRing}>
           <span className={styles.statValue}>{averages.assists}</span>
-          <span className={styles.statLabel}>APG</span>
+          <span className={styles.statLabel}>AST</span>
         </div>
-        <div className={styles.statCard}>
+        <div className={styles.statRing}>
           <span className={styles.statValue}>{averages.steals}</span>
-          <span className={styles.statLabel}>SPG</span>
+          <span className={styles.statLabel}>STL</span>
         </div>
-        <div className={styles.statCard}>
+        <div className={styles.statRing}>
           <span className={styles.statValue}>{averages.blocks}</span>
-          <span className={styles.statLabel}>BPG</span>
+          <span className={styles.statLabel}>BLK</span>
         </div>
-        <div className={styles.statCard}>
+        <div className={styles.statRing}>
           <span className={styles.statValue}>{averages.turnovers}</span>
-          <span className={styles.statLabel}>TPG</span>
+          <span className={styles.statLabel}>TO</span>
         </div>
-        <div className={styles.statCard}>
+        <div className={`${styles.statRing} ${styles.statRingHighlight}`}>
           <span className={styles.statValue}>{averages.pi}</span>
-          <span className={styles.statLabel}>PI</span>
+          <span className={styles.statLabel}>PIR</span>
         </div>
       </div>
 
       <section className={styles.section}>
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Game Log</h2>
-        </div>
-
         {gameStats && gameStats.length > 0 ? (
           <>
             <div className={styles.tableHeader}>
