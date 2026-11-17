@@ -8,6 +8,8 @@ import styles from "./leaderboard-content.module.scss";
 import { mapPlayersStats, PlayerLeaderboardData } from "./utils";
 import { MatchPlayerStat } from "@/components/shared";
 
+const MIN_GAMES = 10;
+
 type StatCategory =
   | "points"
   | "rebounds"
@@ -71,7 +73,10 @@ export function LeaderboardContent() {
         .from("players")
         .select("id,name,slug,avatar_url");
 
-      const playersArray = mapPlayersStats(players, stats as MatchPlayerStat[]);
+      const playersArray = mapPlayersStats(
+        players,
+        stats as MatchPlayerStat[],
+      ).filter((player) => player.games >= MIN_GAMES);
 
       setPlayers(playersArray);
       setLoading(false);
